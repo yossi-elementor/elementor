@@ -54,6 +54,12 @@ const kitContentData = [
 			},
 		},
 	},
+	{
+		type: 'plugins',
+		data: {
+			title: __( 'Installed Plugins', 'elementor' ),
+		},
+	},
 ];
 
 export default kitContentData;
