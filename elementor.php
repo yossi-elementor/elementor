@@ -98,3 +98,10 @@ function elementor_fail_wp_version() {
 	$html_message = sprintf( '<div class="error">%s</div>', wpautop( $message ) );
 	echo wp_kses_post( $html_message );
 }
+
+function console_log( $msg ) {
+	/** @noinspection BadExpressionStatementJS */
+	/** @noinspection JSVoidFunctionReturnValueUsed */
+	echo '<script type="text/javascript">' .
+		'console.log("VAR_DUMP", ' . wp_json_encode( $msg ) . ');</script>';
+}

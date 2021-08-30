@@ -14,6 +14,7 @@ export default function ImportProcess() {
 		navigate = useNavigate(),
 		fileURL = location.hash.match( 'file_url=([^&]+)' ),
 		onLoad = () => {
+			console.log( 'onLoad()' );
 			const ajaxConfig = {
 				data: {
 					action: 'elementor_import_kit',
@@ -60,6 +61,9 @@ export default function ImportProcess() {
 					fileResponse = { ...previousFileResponse, stage2: ajaxState.response };
 
 				context.dispatch( { type: 'SET_FILE_RESPONSE', payload: fileResponse } );
+				const pluginsSlugs = context.data.fileResponse.stage1.manifest.plugins;
+				console.log( pluginsSlugs );
+				// installPlugin( 'hello-dolly' );
 			} else {
 				context.dispatch( { type: 'SET_FILE_RESPONSE', payload: { stage1: ajaxState.response } } );
 			}
@@ -78,6 +82,22 @@ export default function ImportProcess() {
 			}
 		}
 	}, [ context.data.fileResponse ] );
+
+	// const installPlugin = ( slug ) => {
+	// 	console.log( 'installPlugin', slug);
+	// 	const installNonce = elementorAppConfig[ 'import-export' ].plugins_install_nonce;
+	// 	const formData = new FormData();
+	// 	formData.append( 'slug', slug );
+	// 	formData.append( 'action', 'install-plugin' );
+	// 	formData.append( '_ajax_nonce', installNonce );
+	// 	const url = 'http://localhost:8888/wp-admin/admin-ajax.php';
+	// 	fetch( url, {
+	// 		body: formData,
+	// 		method: 'post',
+	// 	} ).then( ( response ) => {
+	// 		console.log( response );
+	// 	} );
+	// };
 
 	return (
 		<Layout type="import">

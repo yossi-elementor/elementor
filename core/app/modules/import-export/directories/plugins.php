@@ -26,6 +26,13 @@ class Plugins extends Base {
 	}
 
 	protected function import( array $import_settings ) {
+
 		return null;
 	}
+
 }
+//class EmptySkin {
+//	public function __call($func, $args) {
+//
+//	}
+//}

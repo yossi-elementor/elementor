@@ -49,15 +49,15 @@ class Module extends BaseModule {
 	public function get_init_settings() {
 		if ( ! Plugin::$instance->app->is_current() ) {
 			return [];
-		}
-
+		};
 		$export_nonce = wp_create_nonce( 'elementor_export' );
-
+		$plugins_install_nonce = wp_create_nonce( 'updates' );
 		$export_url = add_query_arg( [ 'nonce' => $export_nonce ], Plugin::$instance->app->get_base_url() );
 
 		return [
 			'exportURL' => $export_url,
 			'summaryTitles' => $this->get_summary_titles(),
+			'plugins_install_nonce' => $plugins_install_nonce,
 		];
 	}
 
