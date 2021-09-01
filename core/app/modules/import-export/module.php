@@ -52,12 +52,18 @@ class Module extends BaseModule {
 		};
 		$export_nonce = wp_create_nonce( 'elementor_export' );
 		$plugins_install_nonce = wp_create_nonce( 'updates' );
+
+		$installed_plugins = array_map(function ( $plugin ) {
+			return dirname( plugin_basename( $plugin ) );
+		}, array_keys( Plugin::$instance->wp->get_plugins()->all() ) );
+
 		$export_url = add_query_arg( [ 'nonce' => $export_nonce ], Plugin::$instance->app->get_base_url() );
 
 		return [
 			'exportURL' => $export_url,
 			'summaryTitles' => $this->get_summary_titles(),
-			'plugins_install_nonce' => $plugins_install_nonce,
+			'pluginsInstallNonce' => $plugins_install_nonce,
+			'installedPlugins' => $installed_plugins,
 		];
 	}
 

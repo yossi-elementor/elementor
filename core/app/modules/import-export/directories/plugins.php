@@ -22,17 +22,13 @@ class Plugins extends Base {
 
 	protected function export() {
 		$the_plugs = Plugin::$instance->wp->get_active_plugins();
-		return $the_plugs->all();
+		return array_map( function( $plugin ) {
+			return dirname( plugin_basename( $plugin ) );
+		}, array_keys( $the_plugs->all() ) );
 	}
 
 	protected function import( array $import_settings ) {
-
 		return null;
 	}
 
 }
-//class EmptySkin {
-//	public function __call($func, $args) {
-//
-//	}
-//}

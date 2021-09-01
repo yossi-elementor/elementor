@@ -62,8 +62,17 @@ export default function ImportProcess() {
 
 				context.dispatch( { type: 'SET_FILE_RESPONSE', payload: fileResponse } );
 				const pluginsSlugs = context.data.fileResponse.stage1.manifest.plugins;
-				console.log( pluginsSlugs );
-				// installPlugin( 'hello-dolly' );
+				const installedPlugins = elementorAppConfig[ 'import-export' ].installedPlugins;
+				console.log( 'imported', pluginsSlugs );
+				console.log( 'installed', 	installedPlugins );
+
+				pluginsSlugs.forEach( ( plugin ) => {
+					if ( ! installedPlugins.includes( plugin ) ) {
+						installPlugin( plugin );
+					} else {
+						console.log( 'Already installed', plugin );
+					}
+				} );
 			} else {
 				context.dispatch( { type: 'SET_FILE_RESPONSE', payload: { stage1: ajaxState.response } } );
 			}
@@ -83,21 +92,23 @@ export default function ImportProcess() {
 		}
 	}, [ context.data.fileResponse ] );
 
-	// const installPlugin = ( slug ) => {
-	// 	console.log( 'installPlugin', slug);
-	// 	const installNonce = elementorAppConfig[ 'import-export' ].plugins_install_nonce;
-	// 	const formData = new FormData();
-	// 	formData.append( 'slug', slug );
-	// 	formData.append( 'action', 'install-plugin' );
-	// 	formData.append( '_ajax_nonce', installNonce );
-	// 	const url = 'http://localhost:8888/wp-admin/admin-ajax.php';
-	// 	fetch( url, {
-	// 		body: formData,
-	// 		method: 'post',
-	// 	} ).then( ( response ) => {
-	// 		console.log( response );
-	// 	} );
-	// };
+	const installPlugin = ( slug ) => {
+		console.log( 'Installing Plugin', slug );
+		const installNonce = elementorAppConfig[ 'import-export' ].pluginsInstallNonce;
+		const formData = new FormData();
+		formData.append( 'slug', slug );
+		formData.append( 'action', 'install-plugin' );
+		formData.append( '_ajax_nonce', installNonce );
+		const url = 'http://localhost:8888/wp-admin/admin-ajax.php';
+		fetch( url, {
+			body: formData,
+			method: 'post',
+		} ).then( ( response ) => {
+			console.log( 'Installed', slug, response );
+		} ).catch( ( error ) => {
+			console.log( 'Installing error', slug, error );
+		} );
+	};
 
 	return (
 		<Layout type="import">
