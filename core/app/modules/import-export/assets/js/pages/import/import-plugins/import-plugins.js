@@ -11,14 +11,16 @@ export default function ImportPlugins() {
 	const context = useContext( Context );
 	const navigation = useNavigate();
 	const [ importedPlugins, setImportedPlugins ] = useState( null );
-	const [ installPlugins, setInstalledPlugins ] = useState( null );
+	const [ installedPlugins, setInstalledPlugins ] = useState( null );
+	const [ activePlugins, setActivePlugins ] = useState( null );
+	const [ selectedPlugins, setSelectedPlugins ] = useState( null );
 	const getFooter = () => {
 		return (
 			<WizardFooter separator justify="end">
 				<Button
-					text={__( 'Previous', 'elementor' )}
+					text={ __( 'Previous', 'elementor' ) }
 					variant="contained"
-					onClick={() => context.dispatch( { type: 'SET_FILE', payload: null } )}
+					onClick={ () => context.dispatch( { type: 'SET_FILE', payload: null } ) }
 				/>
 
 				<ImportButton/>
@@ -26,14 +28,24 @@ export default function ImportPlugins() {
 		);
 	};
 	useEffect( () => {
-		console.log( 'import/plugins useEff' );
-
 		if ( context.data.fileResponse.stage1.manifest.plugins ) {
-			console.log( 'context.data.fileResponse.stage1.manifest.plugins', context.data.fileResponse.stage1.manifest.plugins );
 			setImportedPlugins( context.data.fileResponse.stage1.manifest.plugins );
 			setInstalledPlugins( elementorAppConfig[ 'import-export' ].installedPlugins );
+			setActivePlugins( elementorAppConfig[ 'import-export' ].activePlugins );
 		}
 	}, [ context.data.fileResponse.stage1.manifest.plugins ] );
+
+	const getPluginsStatus = ( plugin ) => {
+		let status;
+		if ( installedPlugins.includes( plugin ) && activePlugins.includes( plugin ) ) {
+			status = 'active';
+		} else if ( installedPlugins.includes( plugin ) ) {
+			status = 'installed';
+		} else {
+			status = 'not installed';
+		}
+		return status;
+	};
 
 	const install = () => {
 		pluginsSlugs.forEach( ( plugin ) => {
@@ -43,6 +55,16 @@ export default function ImportPlugins() {
 				console.log( 'Already installed', plugin );
 			}
 		} );
+	};
+
+	useEffect( () => {
+		console.log( context.data.includedPlugins );
+		setSelectedPlugins( context.data.includedPlugins );
+	}, [ context.data.includedPlugins ] );
+
+	const addPlugin = ( slug ) => {
+		const actionType = selectedPlugins.includes( slug ) ? 'REMOVE_PLUGIN' : 'ADD_PLUGIN';
+		context.dispatch( { type: actionType, payload: slug } );
 	};
 
 	const installPlugin = ( slug ) => {
@@ -64,12 +86,19 @@ export default function ImportPlugins() {
 	};
 
 	return (
-		<Layout type="import" footer={getFooter()}>
+		<Layout type="import" footer={ getFooter() }>
 			<section className="e-app-export-kit">
 				<div>
-					{importedPlugins && importedPlugins.map( ( plugin ) => {
-						return <div key={plugin}>{plugin}</div>;
-					} )}
+					{ importedPlugins && importedPlugins.map( ( plugin ) => {
+						return (
+							<div style={ { margin: '1rem', cursor: 'pointer' } }
+								 onClick={ () => addPlugin( plugin ) }
+								 key={ plugin }>
+								{ selectedPlugins.includes( plugin ) ? '-- ' : '++ ' }
+								{ plugin } -
+								{ getPluginsStatus( plugin ) }</div>
+						);
+					} ) }
 				</div>
 			</section>
 		</Layout>

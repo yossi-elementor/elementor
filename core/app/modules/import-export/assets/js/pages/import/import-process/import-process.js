@@ -14,7 +14,6 @@ export default function ImportProcess() {
 		navigate = useNavigate(),
 		fileURL = location.hash.match( 'file_url=([^&]+)' ),
 		onLoad = () => {
-			console.log( 'onLoad()' );
 			const ajaxConfig = {
 				data: {
 					action: 'elementor_import_kit',

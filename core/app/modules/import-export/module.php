@@ -57,6 +57,10 @@ class Module extends BaseModule {
 			return dirname( plugin_basename( $plugin ) );
 		}, array_keys( Plugin::$instance->wp->get_plugins()->all() ) );
 
+		$active_plugins = array_map(function ( $plugin ) {
+			return dirname( plugin_basename( $plugin ) );
+		}, array_keys( Plugin::$instance->wp->get_active_plugins()->all() ) );
+
 		$export_url = add_query_arg( [ 'nonce' => $export_nonce ], Plugin::$instance->app->get_base_url() );
 
 		return [
@@ -64,6 +68,7 @@ class Module extends BaseModule {
 			'summaryTitles' => $this->get_summary_titles(),
 			'pluginsInstallNonce' => $plugins_install_nonce,
 			'installedPlugins' => $installed_plugins,
+			'activePlugins' => $active_plugins,
 		];
 	}
 

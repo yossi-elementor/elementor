@@ -39,6 +39,10 @@ export const reducer = ( state, action ) => {
 			return { ...state, referrer: action.payload };
 		case 'SET_INCLUDES':
 			return { ...state, includes: action.payload };
+		case 'ADD_PLUGIN':
+			return ReducerActions.updateArray( state, 'includedPlugins', action.payload, 'add' );
+		case 'REMOVE_PLUGIN':
+			return ReducerActions.updateArray( state, 'includedPlugins', action.payload, 'remove' );
 		default:
 			return state;
 	}
