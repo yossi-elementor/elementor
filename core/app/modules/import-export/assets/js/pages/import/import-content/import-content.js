@@ -1,8 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from '@reach/router';
-
 import { Context } from '../../../context/context-provider';
-
 import Layout from '../../../templates/layout';
 import PageHeader from '../../../ui/page-header/page-header';
 import KitContent from '../../../shared/kit-content/kit-content';
@@ -13,6 +11,8 @@ import WizardFooter from 'elementor-app/organisms/wizard-footer';
 import ImportButton from './components/import-button/import-button';
 
 export default function ImportContent() {
+	const [ includesPlugins, setIncludesPlugins ] = useState( null );
+
 	const context = useContext( Context ),
 		navigate = useNavigate(),
 		getFooter = () => (
@@ -23,7 +23,10 @@ export default function ImportContent() {
 					onClick={ () => context.dispatch( { type: 'SET_FILE', payload: null } ) }
 				/>
 
-				<ImportButton />
+				{ includesPlugins ? <button onClick={ () => {
+					navigate( '/import/plugins' );
+				} }> next </button> : <ImportButton /> }
+
 			</WizardFooter>
 		),
 		getLearnMoreLink = () => (
@@ -37,6 +40,11 @@ export default function ImportContent() {
 			navigate( 'import' );
 		}
 	}, [ context.data.file ] );
+
+	useEffect( () => {
+		console.log( context.data.includes )
+		setIncludesPlugins( context.data.includes && context.data.includes.includes( 'plugins' ) );
+	}, [ context.data.includes ] );
 
 	return (
 		<Layout type="import" footer={ getFooter() }>
