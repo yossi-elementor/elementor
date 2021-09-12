@@ -15,6 +15,7 @@ export default function ExportButton() {
 					elementor_export_kit: {
 						include: context.data.includes,
 						kitInfo: context.data.kitInfo,
+						includedPlugins: context.data.includedPlugins,
 					},
 				};
 

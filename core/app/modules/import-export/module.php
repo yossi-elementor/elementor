@@ -189,7 +189,7 @@ class Module extends BaseModule {
 		$export_settings = $_GET[ self::EXPORT_TRIGGER_KEY ];
 
 		try {
-			$this->export = new Export( self::merge_properties( [], $export_settings, [ 'include', 'kitInfo' ] ) );
+			$this->export = new Export( self::merge_properties( [], $export_settings, [ 'include', 'kitInfo', 'includedPlugins' ] ) );
 
 			$export_result = $this->export->run();
 

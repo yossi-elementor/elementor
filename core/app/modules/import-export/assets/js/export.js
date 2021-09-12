@@ -5,6 +5,7 @@ import router from '@elementor/router';
 import ExportKit from './pages/export/export-kit/export-kit';
 import ExportComplete from './pages/export/export-complete/export-complete';
 import ExportProcess from './pages/export/export-process/export-process';
+import ExportPlugins from './pages/export/export-plugins/export-plugins';
 
 export default function Export() {
 	return (
@@ -13,6 +14,7 @@ export default function Export() {
 				<Router>
 					<ExportComplete path="complete" />
 					<ExportProcess path="process" />
+					<ExportPlugins path="plugins" />
 					<ExportKit default />
 				</Router>
 			</LocationProvider>
