@@ -42,7 +42,6 @@ export default function ImportContent() {
 	}, [ context.data.file ] );
 
 	useEffect( () => {
-		console.log( context.data.includes )
 		setIncludesPlugins( context.data.includes && context.data.includes.includes( 'plugins' ) );
 	}, [ context.data.includes ] );
 

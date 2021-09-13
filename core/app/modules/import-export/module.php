@@ -53,12 +53,16 @@ class Module extends BaseModule {
 		$export_nonce = wp_create_nonce( 'elementor_export' );
 		$plugins_install_nonce = wp_create_nonce( 'updates' );
 
-		$installed_plugins = array_map(function ( $plugin ) {
-			return dirname( plugin_basename( $plugin ) );
+		$installed_plugins = array_map(function ( $plugin_key ) {
+			$plugin = Plugin::$instance->wp->get_plugins()[ $plugin_key ];
+			$plugin['Slug'] = dirname( plugin_basename( $plugin_key ) );
+			return $plugin;
 		}, array_keys( Plugin::$instance->wp->get_plugins()->all() ) );
 
-		$active_plugins = array_map(function ( $plugin ) {
-			return dirname( plugin_basename( $plugin ) );
+		$active_plugins = array_map(function ( $plugin_key ) {
+			$plugin = Plugin::$instance->wp->get_plugins()[ $plugin_key ];
+			$plugin['Slug'] = dirname( plugin_basename( $plugin_key ) );
+			return $plugin;
 		}, array_keys( Plugin::$instance->wp->get_active_plugins()->all() ) );
 
 		$export_url = add_query_arg( [ 'nonce' => $export_nonce ], Plugin::$instance->app->get_base_url() );
@@ -105,6 +109,15 @@ class Module extends BaseModule {
 			$summary_titles['site-settings'][ $key ] = $tab->get_title();
 		}
 
+		$installed_plugins = array_map(function ( $plugin_key ) {
+			$plugin = Plugin::$instance->wp->get_plugins()[ $plugin_key ];
+			$plugin['Slug'] = dirname( plugin_basename( $plugin_key ) );
+			return $plugin;
+		}, array_keys( Plugin::$instance->wp->get_plugins()->all() ) );
+
+		foreach ( $installed_plugins as $plugin => $value ) {
+			$summary_titles['plugins'][ $value['Slug'] ] = $value['Title'];
+		}
 		return $summary_titles;
 	}
 

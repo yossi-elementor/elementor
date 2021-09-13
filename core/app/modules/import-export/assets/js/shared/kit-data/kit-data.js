@@ -62,6 +62,13 @@ export default function KitData( props ) {
 				.entries( mergedContent )
 				.map( ( item ) => getSummaryTitle( 'content', item[ 0 ], item[ 1 ].length ) );
 		},
+		getPlugins = () => {
+		const kitDataPlugins = kitData?.plugins || [];
+		const plugins = kitDataPlugins.map( ( slug ) => elementorAppConfig[ 'import-export' ].installedPlugins.find( ( plugin ) => plugin.Slug === slug ) );
+			return Object
+				.entries( plugins )
+				.map( ( item ) => getSummaryTitle( 'plugins', item[ 1 ].Slug ) );
+		},
 		kitContent = [
 			{
 				title: __( 'Templates:', 'elementor' ),
@@ -74,6 +81,10 @@ export default function KitData( props ) {
 			{
 				title: __( 'Content:', 'elementor' ),
 				data: getContent(),
+			},
+			{
+				title: __( 'Required Plugins:', 'elementor' ),
+				data: getPlugins(),
 			},
 		];
 

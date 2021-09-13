@@ -58,7 +58,6 @@ export default function ImportPlugins() {
 	};
 
 	useEffect( () => {
-		console.log( context.data.includedPlugins );
 		setSelectedPlugins( context.data.includedPlugins );
 	}, [ context.data.includedPlugins ] );
 

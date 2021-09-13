@@ -5,7 +5,10 @@ import './export-plugins.scss';
 import Layout from '../../../templates/layout';
 import Button from 'elementor-app/ui/molecules/button';
 import WizardFooter from 'elementor-app/organisms/wizard-footer';
-import ExportButton from "../export-kit/components/export-button/export-button";
+import ExportButton from '../export-kit/components/export-button/export-button';
+import PageHeader from '../../../ui/page-header/page-header';
+import Box from '../../../../../../../assets/js/ui/atoms/box';
+import List from '../../../../../../../assets/js/ui/molecules/list';
 
 export default function ExportPlugins() {
 	const context = useContext( Context );
@@ -33,7 +36,6 @@ export default function ExportPlugins() {
 	}, [] );
 
 	useEffect( () => {
-		console.log(context.data.includedPlugins)
 		setSelectedPlugins( context.data.includedPlugins );
 	}, [ context.data.includedPlugins ] );
 
@@ -56,21 +58,36 @@ export default function ExportPlugins() {
 
 	return (
 		<Layout type="export" footer={ getFooter() }>
-			<section className="e-app-export-kit">
+			<section className="e-app-export-plugins">
 
-				<div>
-					{ installedPlugins && installedPlugins.map( ( plugin ) => {
-						return (
-							<div style={ { margin: '1rem', cursor: 'pointer' } }
-								 onClick={ () => addPlugin( plugin ) }
-								 key={ plugin }>
-								{ selectedPlugins.includes( plugin ) ? '-- ' : '++ ' }
-								{ plugin } -
-								{ getPluginsStatus( plugin ) }</div>
-						);
-					} ) }
+				<PageHeader
+					heading={ __( 'Choose which plugins to export with your kit', 'elementor' ) }
+					description={ [
+						<React.Fragment key="description-secondary-line">
+							{ __( 'Choose only plugins that are relevant for your kit', 'elementor' ) }
+						</React.Fragment>,
+					] }
+				/>
 
-				</div>
+				<Box>
+					<List separated className="e-app-export-plugins-content">
+						<div>
+							{ installedPlugins && installedPlugins.map( ( plugin ) => {
+								return (
+									<List.Item padding="20" key={ plugin.Slug } className="e-app-export-plugins-content__item">
+										<div
+											 onClick={ () => addPlugin( plugin.Slug ) }
+											 key={ plugin.Slug }>
+											{ selectedPlugins.includes( plugin.Slug ) ? '-- ' : '++ ' }
+											{ plugin.Title } - { plugin.Version }
+											{ getPluginsStatus( plugin.Slug ) }</div>
+									</List.Item>
+								);
+							} ) }
+
+						</div>
+					</List>
+				</Box>
 			</section>
 		</Layout>
 	);

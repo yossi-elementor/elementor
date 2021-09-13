@@ -22,10 +22,7 @@ class Plugins extends Base {
 
 	protected function export() {
 		$included_plugins = $this->iterator->get_settings( 'includedPlugins' );
-		$the_plugs = Plugin::$instance->wp->get_active_plugins();
-		return array_map( function( $plugin ) {
-			return dirname( plugin_basename( $plugin ) );
-		}, array_keys( $the_plugs->all() ) );
+		return $included_plugins;
 	}
 
 	protected function import( array $import_settings ) {
