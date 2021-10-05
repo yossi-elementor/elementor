@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import TemplatesFeatures from './components/templates-features/templates-features';
 import KitContentCheckbox from './components/kit-content-checkbox/kit-content-checkbox';
@@ -12,9 +12,11 @@ import Grid from 'elementor-app/ui/grid/grid';
 import kitContentData from './kit-content-data/kit-content-data';
 
 import './kit-content.scss';
+import { Context } from "../../context/context-provider";
 
 export default function KitContent( props ) {
-	const hasPro = elementorAppConfig.hasPro,
+	const context = useContext( Context ),
+		hasPro = elementorAppConfig.hasPro,
 		[ isTipsyLibReady, setIsTipsyLibReady ] = useState( false ),
 		[ containerHover, setContainerHover ] = useState( {} ),
 		getTemplateFeatures = ( features, index ) => {
@@ -48,13 +50,20 @@ export default function KitContent( props ) {
 				`${ elementorCommon.config.urls.assets }lib/tipsy/tipsy.min.js?ver=1.0.0`
 				).then( () => setIsTipsyLibReady( true ) );
 		}
+
+		// If content data item has no data object it's implicitly added to the export manifest
+		kitContentData.forEach( ( item ) => {
+			if ( ! item.data ) {
+				context.dispatch( { type: 'ADD_INCLUDE', payload: item.type } );
+			}
+		})
 	}, [] );
 
 	return (
 		<Box>
 			<List separated className="e-app-export-kit-content">
 				{
-					kitContentData.map( ( item, index ) => {
+					kitContentData.filter( item => item.data ).map( ( item, index ) => {
 						const isLockedFeaturesNoPro = item.data.features?.locked && ! hasPro;
 
 						if ( props.manifest ) {

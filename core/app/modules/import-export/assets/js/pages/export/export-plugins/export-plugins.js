@@ -9,13 +9,18 @@ import ExportButton from '../export-kit/components/export-button/export-button';
 import PageHeader from '../../../ui/page-header/page-header';
 import Box from '../../../../../../../assets/js/ui/atoms/box';
 import List from '../../../../../../../assets/js/ui/molecules/list';
+import Checkbox from '../../../../../../../assets/js/ui/atoms/checkbox';
+import PluginListItem from "../../../shared/kit-content/components/plugin-list-item/plugin-list-item";
+import ColumnListItem from "../../../../../../../assets/js/ui/molecules/column-list-item";
 
 export default function ExportPlugins() {
 	const context = useContext( Context );
 	const navigate = useNavigate();
-	const [ installedPlugins, setInstalledPlugins ] = useState( null );
-	const [ activePlugins, setActivePlugins ] = useState( null );
+	const elementorProPluginSlug = 'elementor-pro';
+	const [ activePlugins, setActivePlugins ] = useState( [] );
 	const [ selectedPlugins, setSelectedPlugins ] = useState( [] );
+	const [ elementorProPlugin, setElementorProPlugin ] = useState( null );
+
 	const getFooter = () => {
 		return (
 			<WizardFooter separator justify="end">
@@ -31,12 +36,29 @@ export default function ExportPlugins() {
 	};
 
 	useEffect( () => {
-		setInstalledPlugins( elementorAppConfig[ 'import-export' ].installedPlugins );
-		setActivePlugins( elementorAppConfig[ 'import-export' ].activePlugins );
+		const activePluginsArray = elementorAppConfig[ 'import-export' ].activePlugins;
+		if ( ! activePluginsArray ) {
+			return;
+		}
+		const indexOfElementorPro = activePluginsArray.findIndex( ( plugin ) => elementorProPluginSlug === plugin.Slug );
+		if ( indexOfElementorPro > -1 ) {
+			setElementorProPlugin( activePluginsArray[indexOfElementorPro]);
+		}
+		activePluginsArray.sort( ( a, b ) => {
+			if ( a.Title < b.Title ) {
+				return -1;
+			}
+			if ( a.Title > b.Title ) {
+				return 1;
+			}
+			return 0;
+		} );
+		setActivePlugins( activePluginsArray );
 	}, [] );
 
 	useEffect( () => {
 		setSelectedPlugins( context.data.includedPlugins );
+		console.log(context.data.includedPlugins)
 	}, [ context.data.includedPlugins ] );
 
 	const getPluginsStatus = ( plugin ) => {
@@ -56,6 +78,14 @@ export default function ExportPlugins() {
 		context.dispatch( { type: actionType, payload: slug } );
 	};
 
+	const updateAllPlugins = () => {
+		const isAllSelected = selectedPlugins.length === activePlugins.length
+		activePlugins.forEach( ( plugin ) => {
+			const actionType = isAllSelected ? 'REMOVE_PLUGIN' : 'ADD_PLUGIN';
+			context.dispatch( { type: actionType, payload: plugin.Slug } );
+		})
+	}
+
 	return (
 		<Layout type="export" footer={ getFooter() }>
 			<section className="e-app-export-plugins">
@@ -69,19 +99,32 @@ export default function ExportPlugins() {
 					] }
 				/>
 
+				<ColumnListItem className="e-app-export-plugins-list__header" padding="20" widths={["80%", "20%"]}>
+					<>				<Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
+												checked={ selectedPlugins.length === activePlugins.length }
+												onChange={updateAllPlugins}/>
+						Plugin Name
+					</>
+					<>Version</>
+				</ColumnListItem>
+
 				<Box>
-					<List separated className="e-app-export-plugins-content">
+					<List separated className="e-app-export-plugins-list">
 						<div>
-							{ installedPlugins && installedPlugins.map( ( plugin ) => {
+							{ elementorProPlugin &&
+							<PluginListItem
+								plugin={ elementorProPlugin }
+								selected={ selectedPlugins.includes( elementorProPlugin.Slug ) }
+								onPluginSelected={ () => addPlugin( elementorProPlugin.Slug ) }
+							/> }
+
+							{ activePlugins && activePlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug).map( ( plugin ) => {
 								return (
-									<List.Item padding="20" key={ plugin.Slug } className="e-app-export-plugins-content__item">
-										<div
-											 onClick={ () => addPlugin( plugin.Slug ) }
-											 key={ plugin.Slug }>
-											{ selectedPlugins.includes( plugin.Slug ) ? '-- ' : '++ ' }
-											{ plugin.Title } - { plugin.Version }
-											{ getPluginsStatus( plugin.Slug ) }</div>
-									</List.Item>
+									<PluginListItem key={ plugin.Slug }
+													selected={ selectedPlugins.includes( plugin.Slug ) }
+													plugin={ plugin }
+													onPluginSelected={ () => addPlugin( plugin.Slug ) }
+									/>
 								);
 							} ) }
 

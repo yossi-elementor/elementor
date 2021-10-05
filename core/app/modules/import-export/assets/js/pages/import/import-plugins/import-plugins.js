@@ -35,11 +35,14 @@ export default function ImportPlugins() {
 		}
 	}, [ context.data.fileResponse.stage1.manifest.plugins ] );
 
-	const getPluginsStatus = ( plugin ) => {
+	const getPluginsStatus = ( slug ) => {
+		const foundInstalled = installedPlugins.find( ( plugin ) => plugin.Slug === slug );
+		const foundActive = activePlugins.find( ( plugin ) => plugin.Slug === slug );
+
 		let status;
-		if ( installedPlugins.includes( plugin ) && activePlugins.includes( plugin ) ) {
+		if ( foundInstalled && foundActive ) {
 			status = 'active';
-		} else if ( installedPlugins.includes( plugin ) ) {
+		} else if ( foundInstalled ) {
 			status = 'installed';
 		} else {
 			status = 'not installed';
