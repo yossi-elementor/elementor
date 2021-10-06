@@ -6,14 +6,23 @@ import Layout from '../../../templates/layout';
 import ImportButton from '../import-content/components/import-button/import-button';
 import Button from 'elementor-app/ui/molecules/button';
 import WizardFooter from 'elementor-app/organisms/wizard-footer';
+import List from "../../../../../../../assets/js/ui/molecules/list";
+import PluginListItem from "../../../shared/kit-content/components/plugin-list-item/plugin-list-item";
+import Box from "../../../../../../../assets/js/ui/atoms/box";
+import ColumnListItem from "../../../../../../../assets/js/ui/molecules/column-list-item";
+import Checkbox from "../../../../../../../assets/js/ui/atoms/checkbox";
+
+//context.data.fileResponse.stage1.manifest.plugins
+const mock = ['akismet', 'classic-editor', 'elementor', 'elementor-pro', 'hello-dolly']
 
 export default function ImportPlugins() {
 	const context = useContext( Context );
 	const navigation = useNavigate();
-	const [ importedPlugins, setImportedPlugins ] = useState( null );
-	const [ installedPlugins, setInstalledPlugins ] = useState( null );
-	const [ activePlugins, setActivePlugins ] = useState( null );
-	const [ selectedPlugins, setSelectedPlugins ] = useState( null );
+	const elementorProPluginSlug = 'elementor-pro';
+	const [ importedPlugins, setImportedPlugins ] = useState( [] );
+	const [ installedPlugins, setInstalledPlugins ] = useState( [] );
+	const [ activePlugins, setActivePlugins ] = useState( [] );
+	const [ selectedPlugins, setSelectedPlugins ] = useState( [] );
 	const getFooter = () => {
 		return (
 			<WizardFooter separator justify="end">
@@ -35,9 +44,9 @@ export default function ImportPlugins() {
 		}
 	}, [ context.data.fileResponse.stage1.manifest.plugins ] );
 
-	const getPluginsStatus = ( slug ) => {
-		const foundInstalled = installedPlugins.find( ( plugin ) => plugin.Slug === slug );
-		const foundActive = activePlugins.find( ( plugin ) => plugin.Slug === slug );
+	const getPluginsStatus = ( plugin ) => {
+		const foundInstalled = installedPlugins.find( ( item ) => item.Slug === plugin.Slug );
+		const foundActive = activePlugins.find( ( item ) => item.Slug === plugin.Slug );
 
 		let status;
 		if ( foundInstalled && foundActive ) {
@@ -91,16 +100,45 @@ export default function ImportPlugins() {
 		<Layout type="import" footer={ getFooter() }>
 			<section className="e-app-export-kit">
 				<div>
-					{ importedPlugins && importedPlugins.map( ( plugin ) => {
-						return (
-							<div style={ { margin: '1rem', cursor: 'pointer' } }
-								 onClick={ () => addPlugin( plugin ) }
-								 key={ plugin }>
-								{ selectedPlugins.includes( plugin ) ? '-- ' : '++ ' }
-								{ plugin } -
-								{ getPluginsStatus( plugin ) }</div>
-						);
-					} ) }
+
+					<ColumnListItem className="e-app-export-plugins-list__header" padding="20" widths={["80%", "20%"]}>
+						<>				<Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
+													checked={ selectedPlugins.length === activePlugins.length }
+													onChange={() => {}}/>
+							<span>Plugin Name</span>
+						</>
+						<>Status</>
+						<>Version</>
+					</ColumnListItem>
+
+					<Box>
+						<List separated className="e-app-export-plugins-list">
+							<div>
+								{ importedPlugins && importedPlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug).map( ( plugin ) => {
+									return (
+										<PluginListItem key={ plugin.Slug }
+														selected={ selectedPlugins.includes( plugin.Slug ) }
+														plugin={ plugin }
+														status={ getPluginsStatus( plugin )}
+														onPluginSelected={ () => addPlugin( plugin.Slug ) }
+										/>
+									);
+								} ) }
+
+							</div>
+						</List>
+					</Box>
+
+					{/*{ importedPlugins && importedPlugins.map( ( plugin ) => {*/}
+					{/*	return (*/}
+					{/*		<div style={ { margin: '1rem', cursor: 'pointer' } }*/}
+					{/*			 onClick={ () => addPlugin( plugin ) }*/}
+					{/*			 key={ plugin }>*/}
+					{/*			{ selectedPlugins.includes( plugin ) ? '-- ' : '++ ' }*/}
+					{/*			{ plugin } -*/}
+					{/*			{ getPluginsStatus( plugin ) }</div>*/}
+					{/*	);*/}
+					{/*} ) }*/}
 				</div>
 			</section>
 		</Layout>

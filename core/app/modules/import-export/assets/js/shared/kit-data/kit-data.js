@@ -64,10 +64,9 @@ export default function KitData( props ) {
 		},
 		getPlugins = () => {
 		const kitDataPlugins = kitData?.plugins || [];
-		const plugins = kitDataPlugins.map( ( slug ) => elementorAppConfig[ 'import-export' ].installedPlugins.find( ( plugin ) => plugin.Slug === slug ) );
-			return Object
-				.entries( plugins )
-				.map( ( item ) => getSummaryTitle( 'plugins', item[ 1 ].Slug ) );
+		return Object
+			.entries( kitDataPlugins )
+			.map( ( item ) => getSummaryTitle( 'plugins', item[ 1 ].Slug ) );
 		},
 		kitContent = [
 			{

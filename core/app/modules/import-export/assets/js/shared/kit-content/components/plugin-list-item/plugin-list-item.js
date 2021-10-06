@@ -3,7 +3,7 @@ import ColumnListItem from 'elementor-app/ui/molecules/column-list-item';
 
 import './plugin-list-item.scss';
 
-const PluginListItem = ( { plugin, selected, onPluginSelected } ) => {
+const PluginListItem = ( { plugin, selected, onPluginSelected, status } ) => {
 
 	const openURI = (uri) => {
 		if (uri) {
@@ -23,7 +23,7 @@ const PluginListItem = ( { plugin, selected, onPluginSelected } ) => {
 
 				<span className="e-app-plugins-content__title">{ plugin.Title }</span>
 			</div>
-
+			{ status && <span>{ status }</span>}
 			<span className="e-app-plugins-content__version" onClick={ () => openURI( plugin.PluginURI ) }>{ plugin.Version }</span>
 		</ColumnListItem>
 	);

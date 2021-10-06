@@ -58,8 +58,12 @@ export default function ExportPlugins() {
 
 	useEffect( () => {
 		setSelectedPlugins( context.data.includedPlugins );
-		console.log(context.data.includedPlugins)
+		console.log( context.data.includedPlugins )
 	}, [ context.data.includedPlugins ] );
+
+	const minifiedPlugin = ( plugin ) => {
+		return { Slug: plugin.Slug, Title: plugin.Title, Version: plugin.Version, PluginURI: plugin.PluginURI }
+	}
 
 	const getPluginsStatus = ( plugin ) => {
 		let status;
@@ -73,16 +77,20 @@ export default function ExportPlugins() {
 		return status;
 	};
 
-	const addPlugin = ( slug ) => {
-		const actionType = selectedPlugins.includes( slug ) ? 'REMOVE_PLUGIN' : 'ADD_PLUGIN';
-		context.dispatch( { type: actionType, payload: slug } );
+	const isPluginSelected = ( plugin ) => {
+		return selectedPlugins.find( item => item.Slug === plugin.Slug ) !== undefined
+	}
+
+	const addPlugin = ( plugin ) => {
+		const actionType = isPluginSelected( plugin ) ? 'REMOVE_PLUGIN' : 'ADD_PLUGIN';
+		context.dispatch( { type: actionType, payload: minifiedPlugin( plugin ) } );
 	};
 
 	const updateAllPlugins = () => {
 		const isAllSelected = selectedPlugins.length === activePlugins.length
 		activePlugins.forEach( ( plugin ) => {
 			const actionType = isAllSelected ? 'REMOVE_PLUGIN' : 'ADD_PLUGIN';
-			context.dispatch( { type: actionType, payload: plugin.Slug } );
+			context.dispatch( { type: actionType, payload: minifiedPlugin( plugin ) } );
 		})
 	}
 
@@ -114,16 +122,16 @@ export default function ExportPlugins() {
 							{ elementorProPlugin &&
 							<PluginListItem
 								plugin={ elementorProPlugin }
-								selected={ selectedPlugins.includes( elementorProPlugin.Slug ) }
-								onPluginSelected={ () => addPlugin( elementorProPlugin.Slug ) }
+								selected={ isPluginSelected( elementorProPlugin ) }
+								onPluginSelected={ () => addPlugin( elementorProPlugin ) }
 							/> }
 
 							{ activePlugins && activePlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug).map( ( plugin ) => {
 								return (
 									<PluginListItem key={ plugin.Slug }
-													selected={ selectedPlugins.includes( plugin.Slug ) }
+													selected={ isPluginSelected( plugin ) }
 													plugin={ plugin }
-													onPluginSelected={ () => addPlugin( plugin.Slug ) }
+													onPluginSelected={ () => addPlugin( plugin ) }
 									/>
 								);
 							} ) }
