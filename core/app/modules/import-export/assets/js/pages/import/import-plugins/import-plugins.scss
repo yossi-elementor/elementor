@@ -1,0 +1,21 @@
+.e-app-import-plugins-section {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+
+  &__plugins-box {
+	display: flex;
+	flex-direction: column;
+  }
+
+  &__description {
+	margin-bottom: 16px;
+  }
+}
+
+.e-app-import-plugins-list {
+
+  &__header {
+	font-weight: bold;
+  }
+}

@@ -52,6 +52,7 @@ class Module extends BaseModule {
 		};
 		$export_nonce = wp_create_nonce( 'elementor_export' );
 		$plugins_install_nonce = wp_create_nonce( 'updates' );
+		$plugins_activation_nonce = wp_create_nonce( 'activate-plugin_' );
 
 		$installed_plugins = array_map(function ( $plugin_key ) {
 			$plugin = Plugin::$instance->wp->get_plugins()[ $plugin_key ];
@@ -71,6 +72,7 @@ class Module extends BaseModule {
 			'exportURL' => $export_url,
 			'summaryTitles' => $this->get_summary_titles(),
 			'pluginsInstallNonce' => $plugins_install_nonce,
+			'pluginsActivationNonce' => $plugins_activation_nonce,
 			'installedPlugins' => $installed_plugins,
 			'activePlugins' => $active_plugins,
 		];

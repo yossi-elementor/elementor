@@ -12,7 +12,7 @@ const PluginListItem = ( { plugin, selected, onPluginSelected, status } ) => {
 	}
 
 	return (
-		<ColumnListItem padding="20" itemKey={ plugin.Slug } widths={["80%", "20%"]} className="e-app-plugins-content">
+		<ColumnListItem padding="20" itemKey={ plugin.Slug } widths={["70%", "20%", "10%"]} className="e-app-plugins-content">
 			<div
 				onClick={ () => onPluginSelected( plugin.Slug ) }
 				key={ plugin.Slug }>
@@ -23,7 +23,9 @@ const PluginListItem = ( { plugin, selected, onPluginSelected, status } ) => {
 
 				<span className="e-app-plugins-content__title">{ plugin.Title }</span>
 			</div>
-			{ status && <span>{ status }</span>}
+
+			<span>{ status ? status : '' }</span>
+
 			<span className="e-app-plugins-content__version" onClick={ () => openURI( plugin.PluginURI ) }>{ plugin.Version }</span>
 		</ColumnListItem>
 	);

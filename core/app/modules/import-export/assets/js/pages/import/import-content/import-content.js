@@ -20,7 +20,7 @@ export default function ImportContent() {
 				<Button
 					text={ __( 'Previous', 'elementor' ) }
 					variant="contained"
-					onClick={ () => context.dispatch( { type: 'SET_FILE', payload: null } ) }
+					onClick={ () => navigate( 'import/plugins' ) }
 				/>
 
 				<ImportButton />
@@ -32,12 +32,6 @@ export default function ImportContent() {
 				{ __( 'Learn More', 'elementor' ) }
 			</InlineLink>
 		);
-
-	useEffect( () => {
-		if ( ! context.data.file ) {
-			navigate( 'import' );
-		}
-	}, [ context.data.file ] );
 
 	useEffect( () => {
 		setIncludesPlugins( context.data.includes && context.data.includes.includes( 'plugins' ) );

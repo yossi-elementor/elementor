@@ -107,13 +107,13 @@ export default function ExportPlugins() {
 					] }
 				/>
 
-				<ColumnListItem className="e-app-export-plugins-list__header" padding="20" widths={["80%", "20%"]}>
+				<ColumnListItem className="e-app-export-plugins-list__header" padding="20" widths={["90%", "10%"]}>
 					<>				<Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
 												checked={ selectedPlugins.length === activePlugins.length }
 												onChange={updateAllPlugins}/>
-						Plugin Name
+						{__( 'Plugin Name', 'elementor' )}
 					</>
-					<>Version</>
+					<>{__( 'Version', 'elementor' )}</>
 				</ColumnListItem>
 
 				<Box>
