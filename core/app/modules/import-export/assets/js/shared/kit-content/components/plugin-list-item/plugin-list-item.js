@@ -19,7 +19,7 @@ const PluginListItem = ( { plugin, selected, onPluginSelected, status } ) => {
 
 				<Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
 						  checked={ selected }
-						  onChange={ () => onPluginSelected }/>
+						  onChange={ () => { if (onPluginSelected) onPluginSelected()} }/>
 
 				<span className="e-app-plugins-content__title">{ plugin.Title }</span>
 			</div>

@@ -56,7 +56,7 @@ export default function ImportKit() {
 
 	useEffect( () => {
 		if ( context.data.fileResponse && context.data.file ) {
-			navigate( '/import/content' );
+			navigate( '/import/plugins' );
 		}
 	}, [ context.data.fileResponse ] );
 

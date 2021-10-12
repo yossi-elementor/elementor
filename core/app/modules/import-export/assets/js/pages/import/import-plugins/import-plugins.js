@@ -13,11 +13,11 @@ import ColumnListItem from "../../../../../../../assets/js/ui/molecules/column-l
 import Checkbox from "../../../../../../../assets/js/ui/atoms/checkbox";
 
 //context.data.fileResponse.stage1.manifest.plugins
-const mock = ['akismet', 'classic-editor', 'elementor', 'elementor-pro', 'hello-dolly']
+const mock = [ 'akismet', 'classic-editor', 'elementor', 'elementor-pro', 'hello-dolly' ]
 
 export default function ImportPlugins() {
 	const context = useContext( Context );
-	const navigation = useNavigate();
+	const navigate = useNavigate();
 	const elementorProPluginSlug = 'elementor-pro';
 	const [ importedPlugins, setImportedPlugins ] = useState( [] );
 	const [ installedPlugins, setInstalledPlugins ] = useState( [] );
@@ -32,7 +32,11 @@ export default function ImportPlugins() {
 					onClick={ () => context.dispatch( { type: 'SET_FILE', payload: null } ) }
 				/>
 
-				<ImportButton/>
+				<button onClick={ async () => {
+					await install();
+					navigate( '/import/content' );
+				} }> next </button>
+
 			</WizardFooter>
 		);
 	};
@@ -50,26 +54,27 @@ export default function ImportPlugins() {
 
 		let status;
 		if ( foundInstalled && foundActive ) {
-			status = 'active';
+			status = 'Active';
 		} else if ( foundInstalled ) {
-			status = 'installed';
+			status = 'Inactive';
 		} else {
-			status = 'not installed';
+			status = 'Not Installed';
 		}
 		return status;
 	};
 
-	const install = () => {
-		pluginsSlugs.forEach( ( plugin ) => {
-			if ( ! installedPlugins.includes( plugin ) ) {
-				installPlugin( plugin );
+	const install = async () => {
+		selectedPlugins.forEach( ( slug ) => {
+			if (getPluginsStatus(slug) === 'Not Installed' ) {
+				// installPlugin( slug );
 			} else {
-				console.log( 'Already installed', plugin );
+				console.log( 'Already installed', slug );
 			}
 		} );
 	};
 
 	useEffect( () => {
+		console.log( context.data.includedPlugins)
 		setSelectedPlugins( context.data.includedPlugins );
 	}, [ context.data.includedPlugins ] );
 
@@ -78,7 +83,7 @@ export default function ImportPlugins() {
 		context.dispatch( { type: actionType, payload: slug } );
 	};
 
-	const installPlugin = ( slug ) => {
+	const installPlugin = async ( slug ) => {
 		console.log( 'Installing Plugin', slug );
 		const installNonce = elementorAppConfig[ 'import-export' ].pluginsInstallNonce;
 		const formData = new FormData();
@@ -101,10 +106,12 @@ export default function ImportPlugins() {
 			<section className="e-app-export-kit">
 				<div>
 
-					<ColumnListItem className="e-app-export-plugins-list__header" padding="20" widths={["80%", "20%"]}>
-						<>				<Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
+					<ColumnListItem className="e-app-export-plugins-list__header" padding="20"
+									widths={ [ "80%", "20%" ] }>
+						<>                <Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
 													checked={ selectedPlugins.length === activePlugins.length }
-													onChange={() => {}}/>
+													onChange={ () => {
+													} }/>
 							<span>Plugin Name</span>
 						</>
 						<>Status</>
@@ -114,31 +121,37 @@ export default function ImportPlugins() {
 					<Box>
 						<List separated className="e-app-export-plugins-list">
 							<div>
-								{ importedPlugins && importedPlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug).map( ( plugin ) => {
+								{ importedPlugins && importedPlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug && getPluginsStatus( plugin ) !== 'Active' ).map( ( plugin ) => {
 									return (
 										<PluginListItem key={ plugin.Slug }
 														selected={ selectedPlugins.includes( plugin.Slug ) }
 														plugin={ plugin }
-														status={ getPluginsStatus( plugin )}
+														status={ getPluginsStatus( plugin ) }
 														onPluginSelected={ () => addPlugin( plugin.Slug ) }
 										/>
 									);
 								} ) }
-
 							</div>
 						</List>
 					</Box>
 
-					{/*{ importedPlugins && importedPlugins.map( ( plugin ) => {*/}
-					{/*	return (*/}
-					{/*		<div style={ { margin: '1rem', cursor: 'pointer' } }*/}
-					{/*			 onClick={ () => addPlugin( plugin ) }*/}
-					{/*			 key={ plugin }>*/}
-					{/*			{ selectedPlugins.includes( plugin ) ? '-- ' : '++ ' }*/}
-					{/*			{ plugin } -*/}
-					{/*			{ getPluginsStatus( plugin ) }</div>*/}
-					{/*	);*/}
-					{/*} ) }*/}
+					<div>
+						<apan>Plugins you already have</apan>
+						<Box>
+							<List separated className="e-app-export-plugins-list">
+								<div>
+									{ importedPlugins && importedPlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug && getPluginsStatus( plugin ) === 'Active' ).map( ( plugin ) => {
+										return (
+											<PluginListItem key={ plugin.Slug }
+															selected={ true }
+															plugin={ plugin }
+											/>
+										);
+									} ) }
+								</div>
+							</List>
+						</Box>
+					</div>
 				</div>
 			</section>
 		</Layout>

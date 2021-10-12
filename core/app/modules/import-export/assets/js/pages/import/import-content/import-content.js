@@ -23,9 +23,7 @@ export default function ImportContent() {
 					onClick={ () => context.dispatch( { type: 'SET_FILE', payload: null } ) }
 				/>
 
-				{ includesPlugins ? <button onClick={ () => {
-					navigate( '/import/plugins' );
-				} }> next </button> : <ImportButton /> }
+				<ImportButton />
 
 			</WizardFooter>
 		),
