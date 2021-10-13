@@ -12,14 +12,15 @@ import List from '../../../../../../../assets/js/ui/molecules/list';
 import Checkbox from '../../../../../../../assets/js/ui/atoms/checkbox';
 import PluginListItem from "../../../shared/kit-content/components/plugin-list-item/plugin-list-item";
 import ColumnListItem from "../../../../../../../assets/js/ui/molecules/column-list-item";
+import { usePluginSelection } from "../../../PluginsUtils";
 
 export default function ExportPlugins() {
 	const context = useContext( Context );
 	const navigate = useNavigate();
 	const elementorProPluginSlug = 'elementor-pro';
 	const [ activePlugins, setActivePlugins ] = useState( [] );
-	const [ selectedPlugins, setSelectedPlugins ] = useState( [] );
 	const [ elementorProPlugin, setElementorProPlugin ] = useState( null );
+	const selectedPlugins = usePluginSelection(context);
 
 	const getFooter = () => {
 		return (
@@ -40,11 +41,12 @@ export default function ExportPlugins() {
 		if ( ! activePluginsArray ) {
 			return;
 		}
-		const indexOfElementorPro = activePluginsArray.findIndex( ( plugin ) => elementorProPluginSlug === plugin.Slug );
+		const minifiedActivePlugins = activePluginsArray.map( plugin => minifiedPlugin( plugin ))
+		const indexOfElementorPro = minifiedActivePlugins.findIndex( ( plugin ) => elementorProPluginSlug === plugin.Slug );
 		if ( indexOfElementorPro > -1 ) {
-			setElementorProPlugin( activePluginsArray[indexOfElementorPro]);
+			setElementorProPlugin( minifiedActivePlugins[indexOfElementorPro]);
 		}
-		activePluginsArray.sort( ( a, b ) => {
+		minifiedActivePlugins.sort( ( a, b ) => {
 			if ( a.Title < b.Title ) {
 				return -1;
 			}
@@ -53,45 +55,11 @@ export default function ExportPlugins() {
 			}
 			return 0;
 		} );
-		setActivePlugins( activePluginsArray );
+		setActivePlugins( minifiedActivePlugins );
 	}, [] );
-
-	useEffect( () => {
-		setSelectedPlugins( context.data.includedPlugins );
-		console.log( context.data.includedPlugins )
-	}, [ context.data.includedPlugins ] );
 
 	const minifiedPlugin = ( plugin ) => {
 		return { Slug: plugin.Slug, Title: plugin.Title, Version: plugin.Version, PluginURI: plugin.PluginURI }
-	}
-
-	const getPluginsStatus = ( plugin ) => {
-		let status;
-		if ( installedPlugins.includes( plugin ) && activePlugins.includes( plugin ) ) {
-			status = 'active';
-		} else if ( installedPlugins.includes( plugin ) ) {
-			status = 'installed';
-		} else {
-			status = 'not installed';
-		}
-		return status;
-	};
-
-	const isPluginSelected = ( plugin ) => {
-		return selectedPlugins.find( item => item.Slug === plugin.Slug ) !== undefined
-	}
-
-	const addPlugin = ( plugin ) => {
-		const actionType = isPluginSelected( plugin ) ? 'REMOVE_PLUGIN' : 'ADD_PLUGIN';
-		context.dispatch( { type: actionType, payload: minifiedPlugin( plugin ) } );
-	};
-
-	const updateAllPlugins = () => {
-		const isAllSelected = selectedPlugins.length === activePlugins.length
-		activePlugins.forEach( ( plugin ) => {
-			const actionType = isAllSelected ? 'REMOVE_PLUGIN' : 'ADD_PLUGIN';
-			context.dispatch( { type: actionType, payload: minifiedPlugin( plugin ) } );
-		})
 	}
 
 	return (
@@ -109,8 +77,8 @@ export default function ExportPlugins() {
 
 				<ColumnListItem className="e-app-export-plugins-list__header" padding="20" widths={["90%", "10%"]}>
 					<>				<Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
-												checked={ selectedPlugins.length === activePlugins.length }
-												onChange={updateAllPlugins}/>
+												checked={ selectedPlugins.plugins.length === activePlugins.length }
+												onChange={ () => selectedPlugins.addRemoveAllPlugins( activePlugins )}/>
 						{__( 'Plugin Name', 'elementor' )}
 					</>
 					<>{__( 'Version', 'elementor' )}</>
@@ -122,16 +90,16 @@ export default function ExportPlugins() {
 							{ elementorProPlugin &&
 							<PluginListItem
 								plugin={ elementorProPlugin }
-								selected={ isPluginSelected( elementorProPlugin ) }
-								onPluginSelected={ () => addPlugin( elementorProPlugin ) }
+								selected={ selectedPlugins.contains( elementorProPlugin ) }
+								onPluginSelected={ () => selectedPlugins.addRemovePlugin( elementorProPlugin ) }
 							/> }
 
 							{ activePlugins && activePlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug).map( ( plugin ) => {
 								return (
 									<PluginListItem key={ plugin.Slug }
-													selected={ isPluginSelected( plugin ) }
+													selected={ selectedPlugins.contains( plugin ) }
 													plugin={ plugin }
-													onPluginSelected={ () => addPlugin( plugin ) }
+													onPluginSelected={ () => selectedPlugins.addRemovePlugin( plugin ) }
 									/>
 								);
 							} ) }
