@@ -1,26 +1,32 @@
-$root: e-app-plugins-content;
+$root: e-app-plugins-list-item;
 
 .#{$root} {
-  //--e-app-export-kit-content-title-color: #{$e-app-export-kit-content-title-color};
-  //--e-app-export-kit-content-description-color: #{$e-app-export-kit-content-description-color};
-
-  //flex: 1;
-
+  display: flex;
+  align-items: center;
   cursor: pointer;
 
+  &__title-container {
+	display: flex;
+	align-items: center;
+  }
+
   &__checkbox {
-	flex-shrink: 0;
 	margin-inline-end: spacing(12);
+  }
+
+  &__checkbox-disabled {
+	margin-inline-end: spacing(12);
+	background-color: $eps-gray-500;
+	border-color: $eps-gray-500;
   }
 
   &__title {
 	text-align: left;
   }
 
-  &__status {
-
-  }
   &__version {
-	color: $eps-theme-info
+	.eps-icon {
+	  margin-left: 5px;
+	}
   }
 }

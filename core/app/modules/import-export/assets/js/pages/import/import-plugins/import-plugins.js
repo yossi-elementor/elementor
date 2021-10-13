@@ -136,6 +136,13 @@ export default function ImportPlugins() {
 					] }
 				/>
 
+				<Box className="e-app-import-plugins__pro-banner">
+					<div>
+						<span>{ __( 'Install Elementor Pro', 'elementor' ) }</span>
+						<span>{ __( 'Without Elementor Pro, importing components like templates, widgets and popups won\'t work.', 'elementor' ) }</span>
+					</div>
+					<button>Go Pro</button>
+				</Box>
 				<div>
 					{/*needs to install*/ }
 					<div className="e-app-import-plugins-section">
@@ -144,7 +151,7 @@ export default function ImportPlugins() {
 						<ColumnListItem className="e-app-import-plugins-list__header" padding="20"
 										widths={ [ "70%", "20%", "10%" ] }>
 							<>
-								<Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
+								<Checkbox className="eps-checkbox e-app-plugins-list-item__checkbox"
 										  checked={ selectedPlugins.plugins.length === getActionRequiredPlugins().length }
 										  onChange={ () => selectedPlugins.addRemoveAllPlugins( getActionRequiredPlugins() ) } />
 
@@ -182,6 +189,7 @@ export default function ImportPlugins() {
 										return (
 											<PluginListItem key={ plugin.Slug }
 															selected={ true }
+															disabled={ true }
 															plugin={ plugin }
 											/>
 										);

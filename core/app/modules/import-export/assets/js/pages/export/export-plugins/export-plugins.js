@@ -76,7 +76,7 @@ export default function ExportPlugins() {
 				/>
 
 				<ColumnListItem className="e-app-export-plugins-list__header" padding="20" widths={["90%", "10%"]}>
-					<>				<Checkbox className="eps-checkbox e-app-plugins-content__checkbox"
+					<>				<Checkbox className="eps-checkbox e-app-plugins-list-item__checkbox"
 												checked={ selectedPlugins.plugins.length === activePlugins.length }
 												onChange={ () => selectedPlugins.addRemoveAllPlugins( activePlugins )}/>
 						{__( 'Plugin Name', 'elementor' )}

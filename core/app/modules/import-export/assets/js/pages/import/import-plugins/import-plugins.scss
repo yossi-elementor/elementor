@@ -1,16 +1,22 @@
-.e-app-import-plugins-section {
-  display: flex;
-  flex-direction: column;
-  margin-top: 30px;
+$root: e-app-import-plugins;
 
-  &__plugins-box {
+.#{$root} {
+
+  .e-app-import-plugins__section {
 	display: flex;
 	flex-direction: column;
+	margin-top: 30px;
+
+	&__plugins-box {
+	  display: flex;
+	  flex-direction: column;
+	}
+
+	&__description {
+	  margin-bottom: 16px;
+	}
   }
 
-  &__description {
-	margin-bottom: 16px;
-  }
 }
 
 .e-app-import-plugins-list {
