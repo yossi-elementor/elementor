@@ -137,11 +137,13 @@ export default function ImportPlugins() {
 				/>
 
 				<Box className="e-app-import-plugins__pro-banner">
-					<div>
-						<span>{ __( 'Install Elementor Pro', 'elementor' ) }</span>
+					<div className="e-app-import-plugins__pro-banner-text">
+						<h5>{ __( 'Install Elementor Pro', 'elementor' ) }</h5>
 						<span>{ __( 'Without Elementor Pro, importing components like templates, widgets and popups won\'t work.', 'elementor' ) }</span>
 					</div>
-					<button>Go Pro</button>
+					<button onClick={() => {
+						window.open('https://elementor.com/pro/?utm_source=editor-notice-bar&utm_campaign=gopro&utm_medium=wp-dash', '_blank')
+					}}>Go Pro</button>
 				</Box>
 				<div>
 					{/*needs to install*/ }

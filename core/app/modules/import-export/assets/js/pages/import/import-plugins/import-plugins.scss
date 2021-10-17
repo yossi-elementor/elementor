@@ -2,7 +2,7 @@ $root: e-app-import-plugins;
 
 .#{$root} {
 
-  .e-app-import-plugins__section {
+  .e-app-import-plugins-section {
 	display: flex;
 	flex-direction: column;
 	margin-top: 30px;
@@ -14,6 +14,30 @@ $root: e-app-import-plugins;
 
 	&__description {
 	  margin-bottom: 16px;
+	}
+
+  }
+
+  &__pro-banner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 94px;
+	padding: 20px;
+
+	button {
+	  color: $color-red-rose-garnet;
+	  background-color: transparent;
+	  border: 1px solid $color-red-rose-garnet;
+	}
+
+	&-text {
+	  display: flex;
+	  flex-direction: column;
+
+	  h5 {
+		font-weight: bold;
+	  }
 	}
   }
 
