@@ -6,8 +6,10 @@ import WizardStep from '../../ui/wizard-step/wizard-step';
 
 export default function FileProcess( props ) {
 	useEffect( () => {
-		props.onLoad();
-	}, [] );
+		if (props.shouldLoad) {
+			props.onLoad();
+		}
+	}, [props.shouldLoad] );
 
 	useEffect( () => {
 		if ( 'success' === props.status ) {
@@ -40,6 +42,7 @@ export default function FileProcess( props ) {
 
 FileProcess.propTypes = {
 	className: PropTypes.string,
+	shouldLoad: PropTypes.bool.isRequired,
 	status: PropTypes.oneOf( [ 'initial', 'success', 'error' ] ),
 	onLoad: PropTypes.func.isRequired,
 	onSuccess: PropTypes.func.isRequired,

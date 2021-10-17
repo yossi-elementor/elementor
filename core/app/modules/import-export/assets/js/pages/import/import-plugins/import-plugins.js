@@ -13,9 +13,6 @@ import Checkbox from "../../../../../../../assets/js/ui/atoms/checkbox";
 import PageHeader from "../../../ui/page-header/page-header";
 import { usePluginSelection } from "../../../PluginsUtils";
 
-//context.data.fileResponse.stage1.manifest.plugins
-const mock = [ 'akismet', 'classic-editor', 'elementor', 'elementor-pro', 'hello-dolly' ]
-
 export default function ImportPlugins() {
 	const context = useContext( Context );
 	const navigate = useNavigate();
@@ -74,54 +71,6 @@ export default function ImportPlugins() {
 			status = 'Not Installed';
 		}
 		return status;
-	};
-
-	const install = async () => {
-		selectedPlugins.forEach( ( slug ) => {
-			if ( getPluginsStatus( slug ) === 'Not Installed' ) {
-				installPlugin( slug );
-			} else if ( getPluginsStatus( slug ) === 'Inactive' ) {
-				//activatePlugin( slug );
-			} else {
-				console.log( 'Already installed', slug );
-			}
-		} );
-	};
-
-	const activatePlugin = async ( slug ) => {
-		console.log( 'Activating Plugin', slug );
-		const installNonce = elementorAppConfig[ 'import-export' ].pluginsActivationNonce;
-		const formData = new FormData();
-		formData.append( 'slug', slug );
-		formData.append( 'action', 'activate' );
-		formData.append( '_ajax_nonce', installNonce );
-		const url = 'http://localhost:8888/wp-admin/admin-ajax.php';
-		fetch( url, {
-			body: formData,
-			method: 'post',
-		} ).then( ( response ) => {
-			console.log( 'Activated', slug, response );
-		} ).catch( ( error ) => {
-			console.log( 'Activation error', slug, error );
-		} );
-	};
-
-	const installPlugin = async ( slug ) => {
-		console.log( 'Installing Plugin', slug );
-		const installNonce = elementorAppConfig[ 'import-export' ].pluginsInstallNonce;
-		const formData = new FormData();
-		formData.append( 'slug', slug );
-		formData.append( 'action', 'install-plugin' );
-		formData.append( '_ajax_nonce', installNonce );
-		const url = 'http://localhost:8888/wp-admin/admin-ajax.php';
-		fetch( url, {
-			body: formData,
-			method: 'post',
-		} ).then( ( response ) => {
-			console.log( 'Installed', slug, response );
-		} ).catch( ( error ) => {
-			console.log( 'Installing error', slug, error );
-		} );
 	};
 
 	return (

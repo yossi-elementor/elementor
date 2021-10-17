@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate } from '@reach/router';
 
 import Layout from '../../../templates/layout';
@@ -7,9 +7,12 @@ import FileProcess from '../../../shared/file-process/file-process';
 import { Context } from '../../../context/context-provider';
 
 import useAjax from 'elementor-app/hooks/use-ajax';
+import { usePluginHelper } from './helpers/PluginsInstaller';
 
 export default function ImportProcess() {
 	const { ajaxState, setAjax } = useAjax(),
+		{ pluginsHelper, pluginHelperState } = usePluginHelper(elementorAppConfig[ 'import-export' ].pluginsInstallNonce),
+		[shouldLoad, setShouldLoad] = useState(false),
 		context = useContext( Context ),
 		navigate = useNavigate(),
 		fileURL = location.hash.match( 'file_url=([^&]+)' ),
@@ -78,9 +81,26 @@ export default function ImportProcess() {
 			}
 		}
 	}, [ context.data.fileResponse ] );
+
+	useEffect(() => {
+		if (!context.data.includedPlugins) return;
+		setInstalledPlugins( elementorAppConfig[ 'import-export' ].installedPlugins );
+		setActivePlugins( elementorAppConfig[ 'import-export' ].activePlugins );
+		console.log(context.data.includedPlugins)
+		context.data.includedPlugins.forEach( plugin => {
+			pluginsHelper.install( plugin.Slug )
+		})
+
+	}, [context.data.includedPlugins])
+
+	useEffect(() => {
+		console.log(pluginHelperState)
+	}, [pluginHelperState])
+
 	return (
 		<Layout type="import">
 			<FileProcess
+				shouldLoad={ shouldLoad }
 				status={ ajaxState.status }
 				onLoad={ onLoad }
 				onSuccess={ onSuccess }
