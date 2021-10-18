@@ -12,13 +12,14 @@ import List from '../../../../../../../assets/js/ui/molecules/list';
 import Checkbox from '../../../../../../../assets/js/ui/atoms/checkbox';
 import PluginListItem from "../../../shared/kit-content/components/plugin-list-item/plugin-list-item";
 import ColumnListItem from "../../../../../../../assets/js/ui/molecules/column-list-item";
-import { usePluginSelection } from "../../../PluginsUtils";
+import { usePlugins, usePluginSelection } from "../../../PluginsUtils";
 
 export default function ExportPlugins() {
 	const context = useContext( Context );
 	const navigate = useNavigate();
 	const elementorProPluginSlug = 'elementor-pro';
-	const [ activePlugins, setActivePlugins ] = useState( [] );
+	const { activePlugins } = usePlugins( elementorAppConfig )
+	const [ minifiedActivePlugins, setMinifiedActivePlugins ] = useState([])
 	const [ elementorProPlugin, setElementorProPlugin ] = useState( null );
 	const selectedPlugins = usePluginSelection(context);
 
@@ -37,11 +38,10 @@ export default function ExportPlugins() {
 	};
 
 	useEffect( () => {
-		const activePluginsArray = elementorAppConfig[ 'import-export' ].activePlugins;
-		if ( ! activePluginsArray ) {
+		if ( ! activePlugins ) {
 			return;
 		}
-		const minifiedActivePlugins = activePluginsArray.map( plugin => minifiedPlugin( plugin ))
+		const minifiedActivePlugins = activePlugins.map( plugin => minifiedPlugin( plugin ))
 		const indexOfElementorPro = minifiedActivePlugins.findIndex( ( plugin ) => elementorProPluginSlug === plugin.Slug );
 		if ( indexOfElementorPro > -1 ) {
 			setElementorProPlugin( minifiedActivePlugins[indexOfElementorPro]);
@@ -55,8 +55,8 @@ export default function ExportPlugins() {
 			}
 			return 0;
 		} );
-		setActivePlugins( minifiedActivePlugins );
-	}, [] );
+		setMinifiedActivePlugins( minifiedActivePlugins );
+	}, [ activePlugins ] );
 
 	const minifiedPlugin = ( plugin ) => {
 		return { Slug: plugin.Slug, Title: plugin.Title, Version: plugin.Version, PluginURI: plugin.PluginURI }
@@ -77,8 +77,8 @@ export default function ExportPlugins() {
 
 				<ColumnListItem className="e-app-export-plugins-list__header" padding="20" widths={["90%", "10%"]}>
 					<>				<Checkbox className="eps-checkbox e-app-plugins-list-item__checkbox"
-												checked={ selectedPlugins.plugins.length === activePlugins.length }
-												onChange={ () => selectedPlugins.addRemoveAllPlugins( activePlugins )}/>
+												checked={ selectedPlugins.plugins.length === minifiedActivePlugins.length }
+												onChange={ () => selectedPlugins.addRemoveAllPlugins( minifiedActivePlugins )}/>
 						{__( 'Plugin Name', 'elementor' )}
 					</>
 					<>{__( 'Version', 'elementor' )}</>
@@ -94,7 +94,7 @@ export default function ExportPlugins() {
 								onPluginSelected={ () => selectedPlugins.addRemovePlugin( elementorProPlugin ) }
 							/> }
 
-							{ activePlugins && activePlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug).map( ( plugin ) => {
+							{ minifiedActivePlugins && minifiedActivePlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug).map( ( plugin ) => {
 								return (
 									<PluginListItem key={ plugin.Slug }
 													selected={ selectedPlugins.contains( plugin ) }

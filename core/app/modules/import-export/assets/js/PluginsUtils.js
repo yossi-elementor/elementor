@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
+export const usePlugins = ( elementorAppConfig ) => {
+	const [ installedPlugins, setInstalledPlugins ] = useState( [] );
+	const [ activePlugins, setActivePlugins ] = useState( [] );
+
+	useEffect(() => {
+		setInstalledPlugins( elementorAppConfig[ 'import-export' ].installedPlugins );
+		setActivePlugins( elementorAppConfig[ 'import-export' ].activePlugins );
+	}, [ elementorAppConfig ]);
+
+	return { installedPlugins, activePlugins };
+}
+
 export const usePluginSelection = (context) => {
 
 	const [selectedPlugins, setSelectedPlugins] = useState( { plugins: [] })

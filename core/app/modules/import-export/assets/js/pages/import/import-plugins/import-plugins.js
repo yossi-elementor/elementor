@@ -11,16 +11,15 @@ import Box from "../../../../../../../assets/js/ui/atoms/box";
 import ColumnListItem from "../../../../../../../assets/js/ui/molecules/column-list-item";
 import Checkbox from "../../../../../../../assets/js/ui/atoms/checkbox";
 import PageHeader from "../../../ui/page-header/page-header";
-import { usePluginSelection } from "../../../PluginsUtils";
+import { usePlugins, usePluginSelection } from "../../../PluginsUtils";
 
 export default function ImportPlugins() {
 	const context = useContext( Context );
 	const navigate = useNavigate();
 	const elementorProPluginSlug = 'elementor-pro';
 	const [ importedPlugins, setImportedPlugins ] = useState( [] );
-	const [ installedPlugins, setInstalledPlugins ] = useState( [] );
-	const [ activePlugins, setActivePlugins ] = useState( [] );
-	const selectedPlugins = usePluginSelection(context);
+	const { installedPlugins, activePlugins } = usePlugins( elementorAppConfig )
+	const selectedPlugins = usePluginSelection( context );
 
 	const getFooter = () => {
 		return (
@@ -43,8 +42,8 @@ export default function ImportPlugins() {
 	useEffect( () => {
 		if ( context.data.fileResponse.stage1.manifest.plugins ) {
 			setImportedPlugins( context.data.fileResponse.stage1.manifest.plugins );
-			setInstalledPlugins( elementorAppConfig[ 'import-export' ].installedPlugins );
-			setActivePlugins( elementorAppConfig[ 'import-export' ].activePlugins );
+			// setInstalledPlugins( elementorAppConfig[ 'import-export' ].installedPlugins );
+			// setActivePlugins( elementorAppConfig[ 'import-export' ].activePlugins );
 		}
 	}, [ context.data.fileResponse.stage1.manifest.plugins ] );
 
@@ -55,7 +54,7 @@ export default function ImportPlugins() {
 	}, [ context.data.file ] );
 
 	const getActionRequiredPlugins = () => {
-		return importedPlugins.filter(plugin => plugin.Slug !== elementorProPluginSlug && getPluginsStatus( plugin ) !== 'Active')
+		return importedPlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug && getPluginsStatus( plugin ) !== 'Active' )
 	}
 
 	const getPluginsStatus = ( plugin ) => {
@@ -90,9 +89,9 @@ export default function ImportPlugins() {
 						<h5>{ __( 'Install Elementor Pro', 'elementor' ) }</h5>
 						<span>{ __( 'Without Elementor Pro, importing components like templates, widgets and popups won\'t work.', 'elementor' ) }</span>
 					</div>
-					<button onClick={() => {
-						window.open('https://elementor.com/pro/?utm_source=editor-notice-bar&utm_campaign=gopro&utm_medium=wp-dash', '_blank')
-					}}>Go Pro</button>
+					<button onClick={ () => {
+						window.open( 'https://go.elementor.com/go-pro-import-export', '_blank' ).focus();
+					} }>{ __( 'Go Pro', 'elementor' ) }</button>
 				</Box>
 				<div>
 					{/*needs to install*/ }
@@ -104,7 +103,7 @@ export default function ImportPlugins() {
 							<>
 								<Checkbox className="eps-checkbox e-app-plugins-list-item__checkbox"
 										  checked={ selectedPlugins.plugins.length === getActionRequiredPlugins().length }
-										  onChange={ () => selectedPlugins.addRemoveAllPlugins( getActionRequiredPlugins() ) } />
+										  onChange={ () => selectedPlugins.addRemoveAllPlugins( getActionRequiredPlugins() ) }/>
 
 								<span>{ __( 'Plugin Name', 'elementor' ) }</span>
 							</>
