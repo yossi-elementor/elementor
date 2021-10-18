@@ -37,6 +37,7 @@ export default function ExportProcess() {
 	return (
 		<Layout type="export">
 			<FileProcess
+				shouldLoad={ true }
 				status={ ajaxState.status }
 				onLoad={ onLoad }
 				onSuccess={ onSuccess }

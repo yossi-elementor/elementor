@@ -17,12 +17,15 @@ import { usePlugins, usePluginSelection } from "../../../PluginsUtils";
 export default function ExportPlugins() {
 	const context = useContext( Context );
 	const navigate = useNavigate();
-	const elementorProPluginSlug = 'elementor-pro';
-	const { activePlugins } = usePlugins( elementorAppConfig )
+	const elementorProPluginSlug = '"elementor-pro/elementor-pro"';
+	const { activePlugins } = usePlugins()
 	const [ minifiedActivePlugins, setMinifiedActivePlugins ] = useState([])
 	const [ elementorProPlugin, setElementorProPlugin ] = useState( null );
 	const selectedPlugins = usePluginSelection(context);
 
+	useEffect(() => {
+
+	}, [])
 	const getFooter = () => {
 		return (
 			<WizardFooter separator justify="end">
@@ -42,15 +45,15 @@ export default function ExportPlugins() {
 			return;
 		}
 		const minifiedActivePlugins = activePlugins.map( plugin => minifiedPlugin( plugin ))
-		const indexOfElementorPro = minifiedActivePlugins.findIndex( ( plugin ) => elementorProPluginSlug === plugin.Slug );
+		const indexOfElementorPro = minifiedActivePlugins.findIndex( ( plugin ) => elementorProPluginSlug === plugin.slug );
 		if ( indexOfElementorPro > -1 ) {
 			setElementorProPlugin( minifiedActivePlugins[indexOfElementorPro]);
 		}
 		minifiedActivePlugins.sort( ( a, b ) => {
-			if ( a.Title < b.Title ) {
+			if ( a.title < b.title ) {
 				return -1;
 			}
-			if ( a.Title > b.Title ) {
+			if ( a.title > b.title ) {
 				return 1;
 			}
 			return 0;
@@ -59,7 +62,7 @@ export default function ExportPlugins() {
 	}, [ activePlugins ] );
 
 	const minifiedPlugin = ( plugin ) => {
-		return { Slug: plugin.Slug, Title: plugin.Title, Version: plugin.Version, PluginURI: plugin.PluginURI }
+		return { slug: plugin.plugin, title: plugin.name, version: plugin.version, uri: plugin.plugin_uri }
 	}
 
 	return (
@@ -94,9 +97,9 @@ export default function ExportPlugins() {
 								onPluginSelected={ () => selectedPlugins.addRemovePlugin( elementorProPlugin ) }
 							/> }
 
-							{ minifiedActivePlugins && minifiedActivePlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug).map( ( plugin ) => {
+							{ minifiedActivePlugins && minifiedActivePlugins.filter( plugin => plugin.slug !== elementorProPluginSlug).map( ( plugin ) => {
 								return (
-									<PluginListItem key={ plugin.Slug }
+									<PluginListItem key={ plugin.slug }
 													selected={ selectedPlugins.contains( plugin ) }
 													plugin={ plugin }
 													onPluginSelected={ () => selectedPlugins.addRemovePlugin( plugin ) }
