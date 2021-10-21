@@ -23,8 +23,6 @@ export const reducer = ( state, action ) => {
 			return ReducerActions.updateArray( state, 'includes', action.payload, 'add' );
 		case 'REMOVE_INCLUDE':
 			return ReducerActions.updateArray( state, 'includes', action.payload, 'remove' );
-		case 'SET_FILE_RESPONSE':
-			return { ...state, fileResponse: action.payload };
 		case 'SET_FILE':
 			return { ...state, file: action.payload };
 		case 'ADD_OVERRIDE_CONDITION':
@@ -43,6 +41,12 @@ export const reducer = ( state, action ) => {
 			return ReducerActions.updateArray( state, 'includedPlugins', action.payload, 'add' );
 		case 'REMOVE_PLUGIN':
 			return ReducerActions.updateArray( state, 'includedPlugins', action.payload, 'remove' );
+		case 'SET_UPLOADED_DATA':
+			return { ...state, uploadedData: action.payload };
+		case 'SET_IMPORTED_DATA':
+			return { ...state, importedData: action.payload };
+		case 'SET_EXPORTED_DATA':
+			return { ...state, exportedData: action.payload };
 		default:
 			return state;
 	}

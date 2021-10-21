@@ -1,6 +1,8 @@
 <?php
 namespace Elementor\TemplateLibrary\Classes;
 
+use Elementor\Core\Files\Assets\Svg\Svg_Handler;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -27,6 +29,18 @@ class Import_Images {
 	 * @var array
 	 */
 	private $_replace_image_ids = [];
+
+	/**
+	 * SVG Handler.
+	 *
+	 * Holding the SVG Handler instance.
+	 *
+	 * @since 3.5.0
+	 * @access private
+	 *
+	 * @var Svg_Handler
+	 */
+	private static $svg_handler;
 
 	/**
 	 * Get image hash.
@@ -120,6 +134,21 @@ class Import_Images {
 			return false;
 		}
 
+		$filetype = wp_check_filetype( $filename );
+
+		if ( 'svg' === $filetype['ext'] ) {
+			if ( ! self::$svg_handler ) {
+				self::$svg_handler = new Svg_Handler();
+			}
+
+			// In case that unfiltered-files upload is not enabled, SVG images should not be imported.
+			if ( ! self::$svg_handler->is_enabled() ) {
+				return false;
+			}
+
+			$file_content = self::$svg_handler->sanitizer( $file_content );
+		};
+
 		$upload = wp_upload_bits(
 			$filename,
 			null,
@@ -132,12 +161,13 @@ class Import_Images {
 		];
 
 		$info = wp_check_filetype( $upload['file'] );
+
 		if ( $info ) {
 			$post['post_mime_type'] = $info['type'];
 		} else {
 			// For now just return the origin attachment
 			return $attachment;
-			// return new \WP_Error( 'attachment_processing_error', __( 'Invalid file type.', 'elementor' ) );
+			// return new \WP_Error( 'attachment_processing_error', esc_html__( 'Invalid file type.', 'elementor' ) );
 		}
 
 		$post_id = wp_insert_attachment( $post, $upload['file'], $parent_post_id );

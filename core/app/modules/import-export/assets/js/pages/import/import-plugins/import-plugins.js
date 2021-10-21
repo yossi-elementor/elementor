@@ -40,12 +40,10 @@ export default function ImportPlugins() {
 		);
 	};
 	useEffect( () => {
-		if ( context.data.fileResponse.stage1.manifest.plugins ) {
-			setImportedPlugins( context.data.fileResponse.stage1.manifest.plugins );
-			// setInstalledPlugins( elementorAppConfig[ 'import-export' ].installedPlugins );
-			// setActivePlugins( elementorAppConfig[ 'import-export' ].activePlugins );
+		if ( context.data.uploadedData.manifest.plugins ) {
+			setImportedPlugins( context.data.uploadedData.manifest.plugins );
 		}
-	}, [ context.data.fileResponse.stage1.manifest.plugins ] );
+	}, [ context.data.uploadedData.manifest.plugins ] );
 
 	useEffect( () => {
 		if ( ! context.data.file ) {

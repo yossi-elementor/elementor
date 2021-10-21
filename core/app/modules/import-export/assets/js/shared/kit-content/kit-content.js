@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 
 import TemplatesFeatures from './components/templates-features/templates-features';
 import KitContentCheckbox from './components/kit-content-checkbox/kit-content-checkbox';
@@ -9,15 +9,13 @@ import Heading from 'elementor-app/ui/atoms/heading';
 import Text from 'elementor-app/ui/atoms/text';
 import Grid from 'elementor-app/ui/grid/grid';
 
-import kitContentData from './kit-content-data/kit-content-data';
+import kitContentData from '../kit-content-data/kit-content-data';
 
 import './kit-content.scss';
 import { Context } from "../../context/context-provider";
 
 export default function KitContent( props ) {
-	const context = useContext( Context ),
-		hasPro = elementorAppConfig.hasPro,
-		[ isTipsyLibReady, setIsTipsyLibReady ] = useState( false ),
+	const hasPro = elementorAppConfig.hasPro,
 		[ containerHover, setContainerHover ] = useState( {} ),
 		getTemplateFeatures = ( features, index ) => {
 			if ( ! features ) {
@@ -29,7 +27,6 @@ export default function KitContent( props ) {
 					features={ features }
 					isLocked={ ! hasPro }
 					showTooltip={ containerHover[ index ] }
-					isTipsyLibReady={ isTipsyLibReady }
 				/>
 			);
 		},
@@ -42,22 +39,6 @@ export default function KitContent( props ) {
 		setContainerHoverState = ( index, state ) => {
 			setContainerHover( ( prevState ) => ( { ...prevState, [ index ]: state } ) );
 		};
-
-	useEffect( () => {
-		if ( ! hasPro ) {
-			import(
-				/* webpackIgnore: true */
-				`${ elementorCommon.config.urls.assets }lib/tipsy/tipsy.min.js?ver=1.0.0`
-				).then( () => setIsTipsyLibReady( true ) );
-		}
-
-		// If content data item has no data object it's implicitly added to the export manifest
-		kitContentData.forEach( ( item ) => {
-			if ( ! item.data ) {
-				context.dispatch( { type: 'ADD_INCLUDE', payload: item.type } );
-			}
-		})
-	}, [] );
 
 	return (
 		<Box>
