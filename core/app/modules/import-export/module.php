@@ -74,8 +74,9 @@ class Module extends BaseModule {
 		return [
 			'exportURL' => $export_url,
 			'summaryTitles' => $this->get_summary_titles(),
-			'pluginsInstallNonce' => $plugins_install_nonce,
-			'pluginsActivationNonce' => $plugins_activation_nonce,
+// Not needed due to installing via REST api:
+//			'pluginsInstallNonce' => $plugins_install_nonce,
+//			'pluginsActivationNonce' => $plugins_activation_nonce,
 			'installedPlugins' => $installed_plugins,
 			'activePlugins' => $active_plugins,
 			'isUnfilteredFilesEnabled' => $svg_handler->is_enabled(),
@@ -122,7 +123,7 @@ class Module extends BaseModule {
 		}, array_keys( Plugin::$instance->wp->get_plugins()->all() ) );
 
 		foreach ( $installed_plugins as $plugin => $value ) {
-			$summary_titles['plugins'][ $value['Slug'] ] = $value['Title'];
+			$summary_titles['plugins'][ $value['Title'] ] = $value['Title'];
 		}
 		return $summary_titles;
 	}

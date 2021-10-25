@@ -7,8 +7,6 @@ import UnfilteredFilesDialog from './components/unfiltered-files-dialog/unfilter
 
 import { Context } from '../../../context/context-provider';
 
-import useAjax from 'elementor-app/hooks/use-ajax';
-import { usePluginHelper } from './helpers/PluginsInstaller';
 import useQueryParams from 'elementor-app/hooks/use-query-params';
 import useKit from '../../../hooks/use-kit';
 
@@ -118,7 +116,7 @@ export default function ImportProcess() {
 		setActivePlugins( elementorAppConfig[ 'import-export' ].activePlugins );
 		console.log(context.data.includedPlugins)
 		context.data.includedPlugins.forEach( plugin => {
-			pluginsHelper.install( plugin.Slug )
+			pluginsHelper.install( plugin.slug )
 		})
 
 	}, [context.data.includedPlugins])

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useAjax from "../../../../assets/js/hooks/use-ajax";
 
-export const usePlugins = () => {
+export const usePlugins = (elementorAppConfig) => {
 	const [ installedPlugins, setInstalledPlugins ] = useState( [] );
 	const [ activePlugins, setActivePlugins ] = useState( [] );
 	const { ajaxState, setAjax } = useAjax();

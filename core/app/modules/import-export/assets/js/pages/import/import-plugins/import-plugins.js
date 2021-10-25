@@ -52,13 +52,12 @@ export default function ImportPlugins() {
 	}, [ context.data.file ] );
 
 	const getActionRequiredPlugins = () => {
-		return importedPlugins.filter( plugin => plugin.Slug !== elementorProPluginSlug && getPluginsStatus( plugin ) !== 'Active' )
+		return importedPlugins.filter( plugin => plugin.slug !== elementorProPluginSlug && getPluginsStatus( plugin ) !== 'Active' )
 	}
 
 	const getPluginsStatus = ( plugin ) => {
-		const foundInstalled = installedPlugins.find( ( item ) => item.Slug === plugin.Slug );
-		const foundActive = activePlugins.find( ( item ) => item.Slug === plugin.Slug );
-
+		const foundInstalled = installedPlugins.find( ( item ) => item.plugin === plugin.slug );
+		const foundActive = activePlugins.find( ( item ) => item.plugin === plugin.slug );
 		let status;
 		if ( foundInstalled && foundActive ) {
 			status = 'Active';
@@ -114,7 +113,7 @@ export default function ImportPlugins() {
 								<div>
 									{ importedPlugins && getActionRequiredPlugins().map( ( plugin ) => {
 										return (
-											<PluginListItem key={ plugin.Slug }
+											<PluginListItem key={ plugin.slug }
 															selected={ selectedPlugins.contains( plugin ) }
 															plugin={ plugin }
 															status={ getPluginsStatus( plugin ) }
@@ -135,7 +134,7 @@ export default function ImportPlugins() {
 								<div>
 									{ importedPlugins && importedPlugins.filter( plugin => getPluginsStatus( plugin ) === 'Active' ).map( ( plugin ) => {
 										return (
-											<PluginListItem key={ plugin.Slug }
+											<PluginListItem key={ plugin.slug }
 															selected={ true }
 															disabled={ true }
 															plugin={ plugin }

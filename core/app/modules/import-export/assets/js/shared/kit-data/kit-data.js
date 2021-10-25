@@ -66,7 +66,7 @@ export default function KitData( props ) {
 		const kitDataPlugins = kitData?.plugins || [];
 		return Object
 			.entries( kitDataPlugins )
-			.map( ( item ) => getSummaryTitle( 'plugins', item[ 1 ].Slug ) );
+			.map( ( item ) => getSummaryTitle( 'plugins', item[ 1 ].title ) );
 		},
 		kitContent = [
 			{
