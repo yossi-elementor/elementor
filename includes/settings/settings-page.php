@@ -279,6 +279,10 @@ abstract class Settings_Page {
 		}
 	}
 
+	public function display_onboarding() {
+		do_action('visit_boarding');
+	}
+
 	/**
 	 * Display settings page.
 	 *

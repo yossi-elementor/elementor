@@ -76,9 +76,21 @@ class Settings extends Settings_Page {
 			esc_html__( 'Elementor', 'elementor' ),
 			'manage_options',
 			self::PAGE_ID,
-			[ $this, 'display_settings_page' ],
+			[ $this, 'display_onboarding' ],
 			'',
 			'58.5'
+		);
+
+		add_submenu_page(
+				self::PAGE_ID,
+				esc_html__( 'Settings', 'elementor' ),
+				esc_html__( 'Settings', 'elementor' ),
+				'manage_options',
+				'e-form-settings',
+				function() {
+
+					$this->display_settings_page();
+				}
 		);
 	}
 
@@ -130,6 +142,7 @@ class Settings extends Settings_Page {
 	 * @access public
 	 */
 	public function register_pro_menu() {
+
 		add_submenu_page(
 			self::PAGE_ID,
 			esc_html__( 'Submissions', 'elementor' ),
@@ -399,7 +412,7 @@ All within a simple, intuitive place.', 'elementor' ); ?>
 	 * @access public
 	 */
 	public function admin_menu_change_name() {
-		Utils::change_submenu_first_item_label( 'elementor', esc_html__( 'Settings', 'elementor' ) );
+		Utils::change_submenu_first_item_label( 'elementor', esc_html__( 'Onboarding', 'elementor' ) );
 	}
 
 	/**
