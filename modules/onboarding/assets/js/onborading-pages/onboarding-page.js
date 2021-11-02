@@ -8,7 +8,6 @@ export default function OnboardingPage({title, description, children}) {
 					<p>{description}</p>
 					{children}
 				</div>
-				<button>Next</button>
 			</div>
 			<div className="e-onboarding-page__image">
 
