@@ -32,6 +32,7 @@ class Module extends BaseApp {
 	 * Enqueue admin scripts
 	 */
 	private function enqueue_scripts() {
+		wp_enqueue_style( 'elementor-onboarding', $this->get_css_assets_url( 'onboarding', null, 'default', true ), [], ELEMENTOR_VERSION );
 		wp_enqueue_script( 'elementor-onboarding', $this->get_js_assets_url( 'onboarding' ), [
 			'elementor-common',
 			'react',
@@ -39,7 +40,6 @@ class Module extends BaseApp {
 		], ELEMENTOR_VERSION, true );
 
 		$min_suffix = Utils::is_script_debug() ? '' : '.min';
-
 		wp_enqueue_script( 'tipsy', ELEMENTOR_ASSETS_URL . 'lib/tipsy/tipsy' . $min_suffix . '.js', [
 			'jquery',
 		], '1.0.0', true );
