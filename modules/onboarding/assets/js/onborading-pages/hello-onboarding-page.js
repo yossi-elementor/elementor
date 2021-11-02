@@ -5,10 +5,6 @@ export default function HelloOnboardingPage() {
 
 	const context = useOnboardingContext();
 
-	useEffect(() => {
-		context.setCurrentPageStepsCount(3);
-	}, [])
-
 	const renderStep = () => {
 		switch ( context.currenStepIndex ) {
 			case 0:

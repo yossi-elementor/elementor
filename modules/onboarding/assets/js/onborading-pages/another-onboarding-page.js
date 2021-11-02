@@ -6,10 +6,6 @@ export default function AnotherOnboardingPage() {
 
 	const context = useOnboardingContext();
 
-	useEffect( () => {
-		context.setCurrentPageStepsCount( 2 );
-	}, [] )
-
 	const renderStep = () => {
 		switch ( context.currenStepIndex ) {
 			case 0:

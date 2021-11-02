@@ -10,22 +10,22 @@ export function useOnboardingContext() {
 
 export function OnboardingContextProvider( { children } ) {
 	const flow = [
-		<HelloOnboardingPage/>,
-		<AnotherOnboardingPage/>,
+		{ component: <HelloOnboardingPage/>, stepCount: 3 },
+		{ component: <AnotherOnboardingPage/>, stepCount: 2 },
 	];
 
 	const [ currentPageIndex, setCurrentPageIndex ] = useState( 0 )
-	const [ currentPage, setCurrentPage ] = useState( flow[ 0 ] )
+	const [ currentPage, setCurrentPage ] = useState( flow[ 0 ].component )
 	const [ currenStepIndex, setCurrentStepIndex ] = useState( 0 )
 	const [ currentPageStepsCount, setCurrentPageStepsCount ] = useState( 0 )
 
 	useEffect( () => {
-		setCurrentPage( flow[ currentPageIndex ] );
+		setCurrentPage( flow[ currentPageIndex ].component );
 	}, [ currentPageIndex ] );
 
 	const next = () => {
 		const newStep = currenStepIndex + 1;
-		if (newStep > currentPageStepsCount - 1) {
+		if (newStep > flow[ currentPageIndex ].stepCount - 1 && currentPageIndex + 1 < flow.length) {
 			setCurrentPageIndex( currentPageIndex + 1 );
 			setCurrentStepIndex( 0 );
 		} else {
@@ -37,7 +37,7 @@ export function OnboardingContextProvider( { children } ) {
 		setCurrentPageIndex( currentPageIndex - 1 );
 	}
 
-	const value = { currentPage, currenStepIndex, setCurrentPageStepsCount, next, previous };
+	const value = { flow, currentPage, currentPageIndex, currenStepIndex, currentPageStepsCount, next, previous };
 
 	return <OnboardingContext.Provider value={ value }>{ children }</OnboardingContext.Provider>
 }
