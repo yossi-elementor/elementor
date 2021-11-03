@@ -5,21 +5,31 @@ export default function OnboardingProgress() {
 
 	const context = useOnboardingContext();
 
-	const Circle = ( { selected, stepCount } ) => {
+	const PageCircle = ( { index, stepCount } ) => {
+		const selected = index === context.currentPageIndex;
+		const completed = index < context.currentPageIndex;
+		let text = index + 1;
+		if ( completed ) {
+			text = "✔";
+		}
 		return (
 			<>
-				<div className={ `circle ${ selected ? 'selected' : '' }` }/>
-				{ [
-					...Array( stepCount ),
-				].map( ( value, index ) => (
-					<SmallCircle key={index} selected={selected && index === context.currenStepIndex}/>
-				) ) }
+				<div className={ `e-onboarding-page-circle ${ selected ? 'e-onboarding-page-circle__selected' : '' }` }>
+					{ text }
+				</div>
+				<StepsCircles selected={selected} stepCount={stepCount} />
 			</>
 		)
 	}
 
-	const SmallCircle = ( { selected } ) => {
-		return <div className={ `smallCircle ${ selected ? 'selected' : '' }` }/>
+	const StepsCircles = ( { stepCount, selected } ) => {
+		return (
+			<div className={ `e-onboarding-steps-container ${selected ? '' : 'e-onboarding-steps-container__hidden'}` }>
+				{ [ ...Array( stepCount ) ].map( ( value, index ) => (
+					<div className={ `e-onboarding-steps-container__step ${selected && index === context.currenStepIndex ? 'e-onboarding-steps-container__selected' : ''}` }/>
+				) ) }
+			</div>
+		)
 	}
 
 	return (
@@ -27,7 +37,8 @@ export default function OnboardingProgress() {
 			{ context.flow.map( ( page, index ) => {
 				return (
 					<>
-						<Circle key={index} selected={ index === context.currentPageIndex } stepCount={ page.stepCount }/>
+						<PageCircle key={ index } index={ index } selected={ index === context.currentPageIndex }
+									stepCount={ page.stepCount }/>
 					</>
 				)
 			} ) }

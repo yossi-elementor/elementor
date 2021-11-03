@@ -1,3 +1,6 @@
+$progress-gray: #3A3F45;
+$progress-light-gray: #BABFC5;
+
 #e-onboarding-root {
   display: flex;
   height: 690px;
@@ -25,29 +28,52 @@
   }
 }
 
-.circle {
-  background-color: lightblue;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
+.e-onboarding-page-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  border: 1px solid $progress-light-gray;
+  margin: 0 12px;
+
+  &__selected {
+	background-color: $progress-gray;
+	color: white;
+  }
 }
 
-.smallCircle {
-  background-color: lightblue;
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
+.e-onboarding-steps-container {
+  display: flex;
+  width: 200px;
+  transition: width 2s;
+  &__step {
+	width: 8px;
+	height: 8px;
+	border-radius: 10px;
+	border: 1px solid $progress-light-gray;
+	margin: 0 12px;
+  }
+
+  &__selected {
+	background-color: $progress-gray;
+	color: white;
+  }
 }
 
-.selected {
-  background-color: red;
+.e-onboarding-steps-container__hidden {
+	width: 0;
+	overflow: hidden;
+  	transition: width 2s;
 }
 
 .e-onboarding-progress-bar {
   display: flex;
   width: 100%;
   min-height: 50px;
-  background-color: gray;
+  justify-content: center;
+  align-items: center;
 }
 
 .e-onboarding-container {
