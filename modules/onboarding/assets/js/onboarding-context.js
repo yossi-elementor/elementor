@@ -1,6 +1,8 @@
 import React, { useEffect, useContext, useState, createContext } from 'react';
 import HelloOnboardingPage from "./onborading-pages/hello-onboarding-page";
 import AnotherOnboardingPage from "./onborading-pages/another-onboarding-page";
+import MagicOnboardingPage from "./onborading-pages/magic-onboarding-page";
+import CanvasOnboardingPage from "./onborading-pages/canvas-onboarding-page";
 
 const OnboardingContext = createContext();
 
@@ -10,8 +12,9 @@ export function useOnboardingContext() {
 
 export function OnboardingContextProvider( { children } ) {
 	const flow = [
-		{ component: <HelloOnboardingPage/>, stepCount: 3 },
-		{ component: <AnotherOnboardingPage/>, stepCount: 2 },
+		{ component: <HelloOnboardingPage/>, stepCount: 0 },
+		{ component: <MagicOnboardingPage/>, stepCount: 4 },
+		{ component: <CanvasOnboardingPage/>, stepCount: 2 },
 	];
 
 	const [ currentPageIndex, setCurrentPageIndex ] = useState( 0 )

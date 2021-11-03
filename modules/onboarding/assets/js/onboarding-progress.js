@@ -15,7 +15,7 @@ export default function OnboardingProgress() {
 		return (
 			<>
 				<div className={ `e-onboarding-page-circle ${ selected ? 'e-onboarding-page-circle__selected' : '' }` }>
-					{ text }
+					<span>{ text }</span>
 				</div>
 				<StepsCircles selected={selected} stepCount={stepCount} />
 			</>

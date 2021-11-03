@@ -1,30 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans&display=swap');
+
 $progress-gray: #3A3F45;
 $progress-light-gray: #BABFC5;
+$primary: #040080;
+$brand: #46F2B6;
 
 #e-onboarding-root {
   display: flex;
   height: 690px;
   width: 100%;
   align-items: center;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .e-onboarding-page {
   display: flex;
   height: 100%;
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 6.5rem;
   box-sizing: border-box;
 
   &__content {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	flex: 1;
+	flex: 2;
+
+	h1 {
+	  font-size: 32px;
+	  line-height: 44.8px;
+	}
+
+	p {
+	  font-size: 18px;
+	  line-height: 27px;
+	}
   }
 
   &__image {
 	flex: 1;
-	background-color: gray;
+	background-color: lightgray;
+	margin: 5rem 0 5rem 5rem;
   }
 }
 
@@ -46,14 +62,13 @@ $progress-light-gray: #BABFC5;
 
 .e-onboarding-steps-container {
   display: flex;
-  width: 200px;
-  transition: width 2s;
+
   &__step {
 	width: 8px;
 	height: 8px;
 	border-radius: 10px;
 	border: 1px solid $progress-light-gray;
-	margin: 0 12px;
+	margin: 0 8px;
   }
 
   &__selected {
@@ -63,15 +78,16 @@ $progress-light-gray: #BABFC5;
 }
 
 .e-onboarding-steps-container__hidden {
-	width: 0;
-	overflow: hidden;
-  	transition: width 2s;
+  width: 0;
+  overflow: hidden;
+  transition: width 2s;
 }
 
 .e-onboarding-progress-bar {
   display: flex;
   width: 100%;
   min-height: 50px;
+  margin-top: 16px;
   justify-content: center;
   align-items: center;
 }
@@ -86,15 +102,25 @@ $progress-light-gray: #BABFC5;
   box-shadow: 0 3px 16px rgba(35, 38, 42, 0.2);
   box-sizing: border-box;
 
+  &__footer {
+	width: 100%;
+	margin: 0 6.5rem 68px 6.5rem;
+
+	.next-button {
+	  width: 24rem;
+	  height: 3rem;
+	  font-size: 18px;
+	  background-color: $primary;
+	  color: $brand;
+	  border: none;
+	  cursor: pointer;
+	}
+  }
+
   &__content {
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
 	height: 100%;
-	margin-bottom: 50px;
-
-	&-next-button {
-	  width: 50%;
-	}
   }
 }

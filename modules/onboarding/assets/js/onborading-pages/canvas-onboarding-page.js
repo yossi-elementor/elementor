@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import OnboardingPage from "./onboarding-page";
 import { useOnboardingContext } from "../onboarding-context";
-export default function HelloOnboardingPage() {
+export default function CanvasOnboardingPage() {
 
 	const context = useOnboardingContext();
 
@@ -18,8 +18,10 @@ export default function HelloOnboardingPage() {
 
 	return (
 		<OnboardingPage
-			title={__( 'We always start with Hello.', 'elementor' )}
-			description={__( 'Every WordPress site needs a theme, and Elementor’s Hello theme is a flexible blank canvas where you can build your website exactly the way you want. (Plus, it loads quickly and is great for SEO.)', 'elementor' )}>
+			title={__( 'Ready to connect to Elementor?', 'elementor' )}
+			description={__( 'You’ve set up your site’s basic identity. Great!\n' +
+				'\n' +
+				'Now, add your email and connect so you can access your site from the My Elementor dashboard, enter the Kit Library, and so much more!', 'elementor' )}>
 			{  renderStep() }
 		</OnboardingPage>
 	)

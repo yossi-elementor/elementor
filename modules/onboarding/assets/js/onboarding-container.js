@@ -11,7 +11,10 @@ export default function OnboardingContainer() {
 		<div className="e-onboarding-container__content">
 			<OnboardingProgress />
 			{ context.currentPage }
-			<button className="e-onboarding-container__content-next-button" onClick={() => context.next()}>Next</button>
+			<div className="e-onboarding-container__footer">
+				<button className="next-button" onClick={() => context.next()}>Next</button>
+
+			</div>
 		</div>
 	)
 }
