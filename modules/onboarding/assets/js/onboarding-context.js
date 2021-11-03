@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useState, createContext } from 'react';
 import HelloOnboardingPage from "./onborading-pages/hello-onboarding-page";
-import AnotherOnboardingPage from "./onborading-pages/another-onboarding-page";
 import MagicOnboardingPage from "./onborading-pages/magic-onboarding-page";
 import CanvasOnboardingPage from "./onborading-pages/canvas-onboarding-page";
 

@@ -412,7 +412,7 @@ All within a simple, intuitive place.', 'elementor' ); ?>
 	 * @access public
 	 */
 	public function admin_menu_change_name() {
-		Utils::change_submenu_first_item_label( 'elementor', esc_html__( 'Onboarding', 'elementor' ) );
+		Utils::change_submenu_first_item_label( 'elementor', esc_html__( 'Home', 'elementor' ) );
 	}
 
 	/**
