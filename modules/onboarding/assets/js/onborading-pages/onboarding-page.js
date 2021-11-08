@@ -1,17 +1,23 @@
 import React, { useEffect } from 'react';
+import { Heading } from 'e-components';
+import { StyledOnboardingPage, StyledOnboardingPageContent, StyledOnboardingPageImage } from "./styles";
+
 export default function OnboardingPage({title, description, children}) {
 	return (
-		<div className="e-onboarding-page">
-			<div className="e-onboarding-page__content">
+		<StyledOnboardingPage>
+
+			<StyledOnboardingPageContent>
 				<div>
-					<h1>{title}</h1>
+					<Heading variant="h1">{title}</Heading>
 					<p>{description}</p>
 					{children}
 				</div>
-			</div>
-			<div className="e-onboarding-page__image">
+			</StyledOnboardingPageContent>
 
-			</div>
-		</div>
+			<StyledOnboardingPageImage>
+
+			</StyledOnboardingPageImage>
+
+		</StyledOnboardingPage>
 	)
 }

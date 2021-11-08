@@ -8,9 +8,9 @@ const onBoardingElement = document.getElementById( 'e-onboarding-root' );
 ReactDOM.render(
 	<AppWrapper>
 		<OnboardingContextProvider>
-			<div className="e-onboarding-container">
+
 				<OnboardingContainer />
-			</div>
+
 		</OnboardingContextProvider>
 	</AppWrapper>,
 	onBoardingElement

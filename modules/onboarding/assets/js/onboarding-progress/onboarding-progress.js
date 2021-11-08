@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useOnboardingContext } from "./onboarding-context";
+import { useOnboardingContext } from "../onboarding-context";
+import { StyledPageCircle, StyledProgressBar, StyledStep, StyledStepsContainer } from "./styles";
 
 export default function OnboardingProgress() {
 
@@ -14,9 +15,9 @@ export default function OnboardingProgress() {
 		}
 		return (
 			<>
-				<div className={ `e-onboarding-page-circle ${ selected ? 'e-onboarding-page-circle__selected' : '' }` }>
+				<StyledPageCircle variant={ selected ? 'selected' : '' } >
 					<span>{ text }</span>
-				</div>
+				</StyledPageCircle>
 				<StepsCircles selected={selected} stepCount={stepCount} />
 			</>
 		)
@@ -24,16 +25,16 @@ export default function OnboardingProgress() {
 
 	const StepsCircles = ( { stepCount, selected } ) => {
 		return (
-			<div className={ `e-onboarding-steps-container ${selected ? '' : 'e-onboarding-steps-container__hidden'}` }>
+			<StyledStepsContainer variant={selected ? '' : 'hidden'}>
 				{ [ ...Array( stepCount ) ].map( ( value, index ) => (
-					<div className={ `e-onboarding-steps-container__step ${selected && index === context.currenStepIndex ? 'e-onboarding-steps-container__selected' : ''}` }/>
+					<StyledStep variant={selected && index === context.currenStepIndex ? 'selected' : ''}/>
 				) ) }
-			</div>
+			</StyledStepsContainer>
 		)
 	}
 
 	return (
-		<div className="e-onboarding-progress-bar">
+		<StyledProgressBar>
 			{ context.flow.map( ( page, index ) => {
 				return (
 					<>
@@ -42,6 +43,6 @@ export default function OnboardingProgress() {
 					</>
 				)
 			} ) }
-		</div>
+		</StyledProgressBar>
 	);
 }
