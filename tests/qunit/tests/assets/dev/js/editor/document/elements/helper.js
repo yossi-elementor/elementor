@@ -1,4 +1,7 @@
-export default class ElementsHelper {
+/**
+ * @typedef {import('../../../../../../../../../assets/dev/js/editor/container/container')} Container
+ */
+ export default class ElementsHelper {
 	static createSection( columns = 1, returnFirstColumn = false, options = {} ) {
 		const eSection = $e.run( 'document/elements/create', {
 			model: {
@@ -14,6 +17,16 @@ export default class ElementsHelper {
 		}
 
 		return eSection;
+	}
+
+	static createContainer( options = {} ) {
+		return $e.run( 'document/elements/create', {
+			model: {
+				elType: 'container',
+			},
+			container: elementor.getPreviewContainer(),
+			options,
+		} );
 	}
 
 	static createSectionStructure( columns = 1, structure, returnFirstColumn = false, options = {} ) {
@@ -308,7 +321,8 @@ export default class ElementsHelper {
 	}
 
 	/**
-	 * @return {Container}
+	 * @param {*} eContainer
+	 * @return {Container} button
 	 */
 	static createAutoButton( eContainer = null ) {
 		if ( ! eContainer ) {

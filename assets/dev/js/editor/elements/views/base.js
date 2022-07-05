@@ -51,7 +51,7 @@ BaseElementView = BaseContainer.extend( {
 		const behaviors = {
 			contextMenu: {
 				behaviorClass: require( 'elementor-behaviors/context-menu' ),
-				groups: groups,
+				groups,
 			},
 		};
 
@@ -88,12 +88,22 @@ BaseElementView = BaseContainer.extend( {
 		let ChildView;
 		const elType = model.get( 'elType' );
 
-		if ( 'section' === elType ) {
-			ChildView = require( 'elementor-elements/views/section' );
-		} else if ( 'column' === elType ) {
-			ChildView = require( 'elementor-elements/views/column' );
-		} else {
-			ChildView = elementor.modules.elements.views.Widget;
+		switch ( elType ) {
+			case 'section':
+				ChildView = require( 'elementor-elements/views/section' );
+				break;
+
+			case 'column':
+				ChildView = require( 'elementor-elements/views/column' );
+				break;
+
+			case 'container':
+				ChildView = require( 'elementor-elements/views/container' );
+				break;
+
+			default:
+				ChildView = elementor.modules.elements.views.Widget;
+				break;
 		}
 
 		return elementor.hooks.applyFilters( 'element/view', ChildView, model, this );
@@ -192,8 +202,8 @@ BaseElementView = BaseContainer.extend( {
 		 *
 		 * This filter allows adding new context menu groups to elements.
 		 *
-		 * @param array customGroups - An array of group objects.
-		 * @param string elementType - The current element type.
+		 * @param  array  customGroups - An array of group objects.
+		 * @param  string elementType - The current element type.
 		 */
 		customGroups = elementor.hooks.applyFilters( 'elements/context-menu/groups', customGroups, this.options.model.get( 'elType' ) );
 
@@ -207,9 +217,9 @@ BaseElementView = BaseContainer.extend( {
 				{
 					name: 'delete',
 					icon: 'eicon-trash',
-					title: () => elementor.selection.isMultiple() ?
-							sprintf( __( 'Delete %d items', 'elementor' ), elementor.selection.getElements().length ) :
-							__( 'Delete', 'elementor' ),
+					title: () => elementor.selection.isMultiple()
+							? sprintf( __( 'Delete %d items', 'elementor' ), elementor.selection.getElements().length )
+							: __( 'Delete', 'elementor' ),
 					shortcut: '⌦',
 					callback: () => $e.run( 'document/elements/delete', { containers: elementor.selection.getElements( this.getContainer() ) } ),
 				},
@@ -219,7 +229,7 @@ BaseElementView = BaseContainer.extend( {
 		return groups;
 	},
 
-	getEditButtons: function() {
+	getEditButtons() {
 		return {};
 	},
 
@@ -250,7 +260,7 @@ BaseElementView = BaseContainer.extend( {
 		} );
 	},
 
-	getHandlesOverlay: function() {
+	getHandlesOverlay() {
 		const elementType = this.getElementType(),
 			$handlesOverlay = jQuery( '<div>', { class: 'elementor-element-overlay' } ),
 			$overlayList = jQuery( '<ul>', { class: `elementor-editor-element-settings elementor-editor-${ elementType }-settings` } ),
@@ -268,7 +278,7 @@ BaseElementView = BaseContainer.extend( {
 			 *
 			 * @since 3.5.0
 			 *
-			 * @param array editButtons An array of buttons.
+			 * @param  array editButtons An array of buttons.
 			 */
 			editButtons = elementor.hooks.applyFilters( `elements/edit-buttons`, editButtons );
 
@@ -281,7 +291,7 @@ BaseElementView = BaseContainer.extend( {
 			 *
 			 * @since 3.5.0
 			 *
-			 * @param array editButtons An array of buttons.
+			 * @param  array editButtons An array of buttons.
 			 */
 			editButtons = elementor.hooks.applyFilters( `elements/edit-buttons/${ elementType }`, editButtons );
 		}
@@ -312,61 +322,8 @@ BaseElementView = BaseContainer.extend( {
 		return $handlesOverlay;
 	},
 
-	attachElContent: function( html ) {
+	attachElContent( html ) {
 		this.$el.empty().append( this.getHandlesOverlay(), html );
-	},
-
-	startTransport() {
-		elementorCommon.helpers.softDeprecated( 'element.startTransport', '2.8.0', "$e.run( 'document/elements/copy' )" );
-
-		$e.run( 'document/elements/copy', {
-			container: this.getContainer(),
-		} );
-	},
-
-	copy() {
-		elementorCommon.helpers.softDeprecated( 'element.copy', '2.8.0', "$e.run( 'document/elements/copy' )" );
-
-		$e.run( 'document/elements/copy', {
-			container: this.getContainer(),
-		} );
-	},
-
-	cut() {
-		elementorCommon.helpers.softDeprecated( 'element.cut', '2.8.0' );
-	},
-
-	paste() {
-		elementorCommon.helpers.softDeprecated( 'element.paste', '2.8.0', "$e.run( 'document/elements/paste' )" );
-
-		$e.run( 'document/elements/paste', {
-			container: this.getContainer(),
-			at: this._parent.collection.indexOf( this.model ),
-		} );
-	},
-
-	duplicate() {
-		elementorCommon.helpers.softDeprecated( 'element.duplicate', '2.8.0', "$e.run( 'document/elements/duplicate' )" );
-
-		$e.run( 'document/elements/duplicate', {
-			container: this.getContainer(),
-		} );
-	},
-
-	pasteStyle() {
-		elementorCommon.helpers.softDeprecated( 'element.pasteStyle', '2.8.0', "$e.run( 'document/elements/paste-style' )" );
-
-		$e.run( 'document/elements/paste-style', {
-			container: this.getContainer(),
-		} );
-	},
-
-	resetStyle() {
-		elementorCommon.helpers.softDeprecated( 'element.resetStyle', '2.8.0', "$e.run( 'document/elements/reset-style' )" );
-
-		$e.run( 'document/elements/reset-style', {
-			container: this.getContainer(),
-		} );
 	},
 
 	isStyleTransferControl( control ) {
@@ -403,7 +360,8 @@ BaseElementView = BaseContainer.extend( {
 			model.widgetType = elementView.model.get( 'widgetType' );
 		} else if ( 'section' === model.elType ) {
 			model.isInner = true;
-		} else {
+		} else if ( 'container' !== model.elType ) {
+			// Don't allow adding anything other than widget, inner-section or a container.
 			return;
 		}
 
@@ -412,6 +370,9 @@ BaseElementView = BaseContainer.extend( {
 		if ( customData ) {
 			jQuery.extend( model, customData );
 		}
+
+		// Reset the selected element cache.
+		elementor.channels.panelElements.reply( 'element:selected', null );
 
 		return $e.run( 'document/elements/create', {
 			container: this.getContainer(),
@@ -487,7 +448,7 @@ BaseElementView = BaseContainer.extend( {
 		return attributes.join( ' ' );
 	},
 
-	isInner: function() {
+	isInner() {
 		return !! this.model.get( 'isInner' );
 	},
 
@@ -563,7 +524,7 @@ BaseElementView = BaseContainer.extend( {
 				}
 			}
 
-			const isVisible = elementor.helpers.isActiveControl( control, settings.attributes );
+			const isVisible = elementor.helpers.isActiveControl( control, settings.attributes, settings.controls );
 
 			if ( isVisible && ( classValue || 0 === classValue ) ) {
 				self.$el.addClass( control.prefix_class + classValue );
@@ -581,14 +542,14 @@ BaseElementView = BaseContainer.extend( {
 		this.$el.attr( 'id', customElementID );
 	},
 
-	renderUI: function() {
+	renderUI() {
 		this.renderStyles();
 		this.renderCustomClasses();
 		this.renderCustomElementID();
 		this.enqueueFonts();
 	},
 
-	runReadyTrigger: function() {
+	runReadyTrigger() {
 		const self = this;
 
 		_.defer( function() {
@@ -613,7 +574,7 @@ BaseElementView = BaseContainer.extend( {
 		return 'elementor-element-' + this.getID();
 	},
 
-	renderHTML: function() {
+	renderHTML() {
 		const templateType = this.getTemplateType(),
 			editModel = this.getEditModel();
 
@@ -638,13 +599,12 @@ BaseElementView = BaseContainer.extend( {
 				isRenderRequired = ! hasChanged;
 
 			_.each( settings.changedAttributes(), ( settingValue, settingKey ) => {
-				const control = settings.getControl( settingKey );
-
 				if ( '_column_size' === settingKey ) {
 					isRenderRequired = true;
 					return;
 				}
 
+				const control = settings.getControl( settingKey );
 				if ( ! control ) {
 					isRenderRequired = true;
 					isContentChanged = true;
@@ -728,6 +688,9 @@ BaseElementView = BaseContainer.extend( {
 				}, { timeout: 500 } );
 			}
 		}
+
+		// Defer to wait for all of the children to render.
+		setTimeout( () => this.initDraggable(), 0 );
 	},
 
 	onEditSettingsChanged( changedModel ) {
@@ -803,6 +766,92 @@ BaseElementView = BaseContainer.extend( {
 		this.getEditModel().get( 'settings' ).validators = {};
 
 		elementor.channels.data.trigger( 'element:destroy', this.model );
+	},
+
+	// eslint-disable-next-line jsdoc/require-returns-check
+	/**
+	 * On `$el` drag start event.
+	 * Used inside `Draggable` and can be overridden by the extending views.
+	 */
+	onDragStart() {
+		// TODO: Override if needed.
+	},
+
+	/**
+	 * On `$el` drag end event.
+	 * Used inside `Draggable` and can be overridden by the extending views.
+	 */
+	onDragEnd() {
+		// TODO: Override if needed.
+	},
+
+	/**
+	 * Create a drag helper element.
+	 * Copied from `behaviors/sortable.js` with some refactor.
+	 *
+	 * @return {HTMLDivElement} helper
+	 */
+	getDraggableHelper() {
+		const model = this.getEditModel();
+
+		const helper = document.createElement( 'div' );
+		helper.classList.add( 'elementor-sortable-helper', `elementor-sortable-helper-${ model.get( 'elType' ) }` );
+
+		helper.innerHTML = `
+			<div class="icon">
+				<i class="${ model.getIcon() }"></i>
+			</div>
+			<div class="elementor-element-title-wrapper">
+				<div class="title">${ model.getTitle() }</div>
+			</div>
+		`;
+
+		return helper;
+	},
+
+	/**
+	 * Initialize the Droppable instance.
+	 */
+	initDraggable() {
+		// Init the draggable only for Containers and their children.
+		if ( ! this.$el.hasClass( '.e-container' ) && ! this.$el.parents( '.e-container' ).length ) {
+			return;
+		}
+
+		this.$el.html5Draggable( {
+			onDragStart: ( e ) => {
+				e.stopPropagation();
+
+				// Need to stop this event when the element is absolute since it clashes with this one.
+				// See `behaviors/widget-draggable.js`.
+				if ( this.options.draggable?.isActive ) {
+					return;
+				}
+
+				const helper = this.getDraggableHelper();
+				this.$el[ 0 ].appendChild( helper );
+
+				// Set the x & y coordinates of the helper the same as the legacy jQuery sortable.
+				e.originalEvent.dataTransfer.setDragImage( helper, 25, 20 );
+
+				// Remove the helper element as soon as it's set as a drag image, since the element must be
+				// rendered for at least a fraction of a second in order to set it as a drag image.
+				setTimeout( () => {
+					helper.remove();
+				} );
+
+				this.onDragStart( e );
+
+				elementor.channels.editor.reply( 'element:dragged', this );
+			},
+			onDragEnd: ( e ) => {
+				e.stopPropagation();
+
+				this.onDragEnd( e );
+			},
+
+			groups: [ 'elementor-element' ],
+		} );
 	},
 } );
 

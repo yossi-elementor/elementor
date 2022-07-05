@@ -1,7 +1,5 @@
 import tests from '../tests';
 
-/* global require */
-
 export default class EditorBootstrap {
 	constructor() {
 		jQuery( this.initialize.bind( this ) );
@@ -9,6 +7,7 @@ export default class EditorBootstrap {
 
 	initialize() {
 		// Since JS API catch errors that occurs while running commands, the tests should expect it.
+		// eslint-disable-next-line no-console
 		console.error = ( ... args ) => {
 			throw new Error( args );
 		};

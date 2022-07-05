@@ -1,10 +1,10 @@
 import ComponentBase from 'elementor-api/modules/component-base';
-import BackwardsCompatibility from './backwards-compatibility.js';
 import CommandHistory from './commands/base/command-history';
 import CommandHistoryDebounce from './commands/base/command-history-debounce';
 
 import * as components from './';
 import * as hooks from './hooks/';
+import * as uiStates from './ui-states';
 
 export default class Component extends ComponentBase {
 	static getModules() {
@@ -13,7 +13,7 @@ export default class Component extends ComponentBase {
 				elementorCommon.helpers.hardDeprecated(
 					'$e.modules.document.CommandHistoryBase',
 					'3.0.0',
-					'$e.modules.document.CommandHistory'
+					'$e.modules.document.CommandHistory',
 				);
 
 				return this.CommandHistory;
@@ -22,7 +22,7 @@ export default class Component extends ComponentBase {
 				elementorCommon.helpers.hardDeprecated(
 					'$e.modules.document.CommandHistoryDebounceBase',
 					'3.0.0',
-					'$e.modules.document.CommandHistoryDebounce'
+					'$e.modules.document.CommandHistoryDebounce',
 				);
 
 				return this.CommandHistoryDebounce;
@@ -40,10 +40,8 @@ export default class Component extends ComponentBase {
 	}
 
 	registerAPI() {
-		new BackwardsCompatibility();
-
 		Object.values( components ).forEach( ( ComponentClass ) =>
-			$e.components.register( new ComponentClass )
+			$e.components.register( new ComponentClass ),
 		);
 
 		super.registerAPI();
@@ -57,6 +55,10 @@ export default class Component extends ComponentBase {
 
 	defaultHooks() {
 		return this.importHooks( hooks );
+	}
+
+	defaultUiStates() {
+		return this.importUiStates( uiStates );
 	}
 
 	defaultUtils() {
@@ -91,7 +93,7 @@ export default class Component extends ComponentBase {
 					elementor.getPreviewView().children,
 					'id',
 					id,
-					false
+					false,
 				);
 
 				return elements ? elements[ 0 ] : false;

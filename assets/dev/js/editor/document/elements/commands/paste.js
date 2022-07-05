@@ -51,6 +51,7 @@ export class Paste extends CommandHistory {
 
 			data.forEach( ( model ) => {
 				switch ( model.elType ) {
+					case 'container':
 					case 'section': {
 						// If is inner create section for `inner-section`.
 						if ( model.isInner ) {
@@ -77,7 +78,7 @@ export class Paste extends CommandHistory {
 							{
 								at: index,
 								edit: false,
-							} )
+							} ),
 						);
 						index++;
 					}
