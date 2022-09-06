@@ -9,6 +9,10 @@ import SiteName from './pages/site-name';
 import SiteLogo from './pages/site-logo';
 import GoodToGo from './pages/good-to-go';
 import InstallPro from './pages/upload-and-install-pro';
+import AnalyticsService from "../../../../services/analytics-service/AnalyticsService";
+import ConsoleAnalyticsAgent from "../../../../services/analytics-service/ConsoleAnalyticsAgent";
+
+new AnalyticsService( new ConsoleAnalyticsAgent() );
 
 export default function App() {
 	// Send an AJAX request to update the database option which makes sure the Onboarding process only runs once,
